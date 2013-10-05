@@ -8,7 +8,8 @@ namespace Album\Controller;
  use Zend\Mvc\Controller\AbstractActionController;
  use Zend\View\Model\ViewModel;
  use Album\Model\Album;          
-use Album\Form\AlbumForm;
+ use Album\Form\AlbumForm;
+ use Album\Form\UploadForm;
 
  class AlbumController extends AbstractActionController
  {
@@ -42,6 +43,41 @@ use Album\Form\AlbumForm;
             }
         }
         return array('form' => $form);
+     }
+
+     public function uploadFormAction()
+{
+    $form     = new UploadForm('upload-form');
+    $tempFile = null;
+
+    $prg = $this->fileprg($form);
+    if ($prg instanceof \Zend\Http\PhpEnvironment\Response) {
+        return $prg; // Return PRG redirect response
+    } elseif (is_array($prg)) {
+        if ($form->isValid()) {
+            $data = $form->getData();
+            // Form is valid, save the form!
+            return $this->redirect()->toRoute('album',array('action' =>'success'));
+        } else {
+            // Form not valid, but file uploads might be valid...
+            // Get the temporary file information to show the user in the view
+            $fileErrors = $form->get('image-file')->getMessages();
+            if (empty($fileErrors)) {
+                $tempFile = $form->get('image-file')->getValue();
+            }
+        }
+    }
+
+    return array(
+        'form'     => $form,
+        'tempFile' => $tempFile,
+    );
+}
+
+
+    public function successAction()
+     {
+        //todo
      }
 
      public function editAction()

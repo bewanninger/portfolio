@@ -19,7 +19,7 @@ msgstr ""
 #: ../view/layout/layout.phtml:6
 #: ../view/layout/layout.phtml:33
 msgid "Skeleton Application"
-msgstr ""
+msgstr "Ted's Daily Art"
 
 #: ../view/layout/layout.phtml:36
 msgid "Home"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: ../view/layout/layout.phtml:50
 msgid "All rights reserved."
-msgstr ""
+msgstr "go fuck yourself"
 
 #: ../view/application/index/index.phtml:2
 #, php-format

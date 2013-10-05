@@ -34,7 +34,7 @@ namespace Album\Model;
          $data = array(
              'artist' => $album->artist,
              'title'  => $album->title,
-             'user'  => $album->title,
+             'user'  => $album->user,
          );
 
          $id = (int) $album->id;
