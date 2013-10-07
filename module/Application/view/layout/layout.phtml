@@ -40,6 +40,8 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                         <li><a href="<?php echo $this->url('album') ?>"><?php echo $this->translate('Album') ?></a></li>
+                        <li><a href="<?php echo $this->url('album',array('action'=>'gallery')) ?>"><?php echo $this->translate('Gallery') ?></a></li>
+                        <li><a href="<?php echo $this->url('album',array('action'=>'upload-form')) ?>"><?php echo $this->translate('Image Upload') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>

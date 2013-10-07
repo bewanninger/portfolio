@@ -12,7 +12,6 @@ class UploadForm extends Form
         parent::__construct($name, $options);
         $this->addElements();
         $this->addInputFilter();
-        $this->testing123();
     }
 
     public function addElements()
