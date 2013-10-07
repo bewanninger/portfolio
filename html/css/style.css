@@ -35,3 +35,12 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+.albumThumb {
+  margin:5px;
+  box-shadow: 1px 1px 5px;
+}
+
+.albumThumb:hover {
+  box-shadow: 1px 1px 0px;
+}

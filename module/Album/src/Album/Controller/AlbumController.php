@@ -2,9 +2,6 @@
 
 namespace Album\Controller;
 
-
-
-
  use Zend\Mvc\Controller\AbstractActionController;
  use Zend\View\Model\ViewModel;
  use Album\Model\Album;          
@@ -45,39 +42,62 @@ namespace Album\Controller;
         return array('form' => $form);
      }
 
-     public function uploadFormAction()
-{
-    $form     = new UploadForm('upload-form');
-    $tempFile = null;
+    public function uploadFormAction()
+    {
+        $form     = new UploadForm('upload-form');
+        $tempFile = null;
 
-    $prg = $this->fileprg($form);
-    if ($prg instanceof \Zend\Http\PhpEnvironment\Response) {
-        return $prg; // Return PRG redirect response
-    } elseif (is_array($prg)) {
-        if ($form->isValid()) {
-            $data = $form->getData();
-            // Form is valid, save the form!
-            return $this->redirect()->toRoute('album',array('action' =>'success'));
-        } else {
-            // Form not valid, but file uploads might be valid...
-            // Get the temporary file information to show the user in the view
-            $fileErrors = $form->get('image-file')->getMessages();
-            if (empty($fileErrors)) {
-                $tempFile = $form->get('image-file')->getValue();
+        $prg = $this->fileprg($form);
+        if ($prg instanceof \Zend\Http\PhpEnvironment\Response) {
+            return $prg; // Return PRG redirect response
+        } elseif (is_array($prg)) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+                //$this->data["image-file"]["tmp_name"];
+                rename($data["image-file"]["tmp_name"],"./html/img/upload/stuuupid.jpg");
+                // Form is valid, save the form!
+                return array(
+                'form'     => $form,
+                'tempFile' => $tempFile,
+                'data'     => $data,
+                );
+                //return $this->redirect()->toRoute('album',array('action' =>'success'));
+            } else {
+                // Form not valid, but file uploads might be valid...
+                // Get the temporary file information to show the user in the view
+                $fileErrors = $form->get('image-file')->getMessages();
+                if (empty($fileErrors)) {
+                    $tempFile = $form->get('image-file')->getValue();
+                }
             }
         }
+
+        return array(
+            'form'     => $form,
+            'tempFile' => $tempFile,
+        );
     }
 
-    return array(
-        'form'     => $form,
-        'tempFile' => $tempFile,
-    );
-}
 
-
-    public function successAction()
+    public function galleryAction()
      {
-        //todo
+        
+        $dir = "./html/img/upload";
+        $drawingNames = scandir($dir);
+        return array (
+            'drawingNames' => $drawingNames,
+            );
+     }
+
+
+     public function viewAction()
+     {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('album', array(
+                'action' => 'gallery'
+            ));
+        }
      }
 
      public function editAction()

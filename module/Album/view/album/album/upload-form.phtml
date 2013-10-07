@@ -1,0 +1,50 @@
+<?php
+
+//$form = $this->form;
+//$form->setAttribute('class', 'form-horizontal');
+$form->prepare(); // The correct enctype is set here ?>
+<?php echo $this->form()->openTag($form); ?>
+
+    <div class="form-element">
+
+
+    	<?php
+    $elem = $form->get('text');
+    $elem->setLabelAttributes(array('class' => 'control-label'));
+    $errors = $elem->getMessages();
+    $errorClass = (!empty($errors)) ? ' error' : '';
+    ?>
+    <div class="control-group<?php echo $errorClass ?>">
+        <?php echo $this->formLabel($elem); ?>
+        <div class="controls">
+            <?php echo $this->formText($elem); ?>
+        </div>
+    </div>
+
+
+        <?php $fileElement = $form->get('image-file'); ?>
+        <?php echo $this->formLabel($fileElement); ?>
+        <?php echo $this->formFile($fileElement); ?>
+        <?php echo $this->formElementErrors($fileElement); ?>
+    </div>
+
+    <button>Submit</button>
+
+<?php echo $this->form()->closeTag(); ?>
+
+
+<?php if(isset($this->data))
+	{
+		echo $this->data["image-file"]["tmp_name"];
+
+		//
+	}
+	else 
+	{
+		echo "hello";
+
+		//echo file_get_contents('/img/upload/sphere.jpg');
+		//echo '<img src="/img/upload/sphere.jpg">';
+	} ?>
+
+<?php //echo var_dump($this); ?>

@@ -1,0 +1,25 @@
+<h1>My Gallery</h1>
+
+
+
+<?php
+
+
+//echo "this is the Drawing directory";
+//echo var_dump($this);
+$files = $drawingNames;
+
+unset($files[0],$files[1]);
+echo '<table>';
+foreach ($files as $key => $value) {
+	echo '<img class="albumThumb" src="/img/upload/'.$value.'" width="200" height="200">';
+}
+echo '</table>';
+
+
+
+
+
+
+
+?>
