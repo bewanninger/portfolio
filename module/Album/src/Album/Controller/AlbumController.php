@@ -91,27 +91,38 @@ namespace Album\Controller;
     public function galleryAction()
      {
         
-        $dir = "./html/img/upload";
-        $drawingNames = scandir($dir);
-        return array (
-            'drawingNames' => $drawingNames,
-            );
+        //$dir = "./html/img/upload";
+       // $drawingNames = scandir($dir);
+        //return array (
+            //'drawingNames' => $drawingNames,
+            //);
+        return new ViewModel(array(
+                'drawings' => $this->getDrawingTable()->fetchAll(),
+            ));
      }
 
 
      public function viewAction()
      {
-        /*
+        //Get the Id from The URL if there is one, otherwise go to gallery
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('album', array(
                 'action' => 'gallery'
             ));
         }
-        */
-            return new ViewModel(array(
-                'drawings' => $this->getDrawingTable()->fetchAll(),
+        //try to grab the info for the picture id added
+        try {
+            $drawing = $this->getDrawingTable()->getAlbum($id);
+            return array( 'drawing' => $drawing);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('album', array(
+                'action' => 'index'
             ));
+        }
+
+            
      }
 
      public function editAction()
@@ -122,7 +133,7 @@ namespace Album\Controller;
                 'action' => 'add'
             ));
         }
-
+        
         // Get the Album with the specified id.  An exception is thrown
         // if it cannot be found, in which case go to the index page.
         try {

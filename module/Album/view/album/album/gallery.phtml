@@ -1,25 +1,17 @@
+<!--recieves Drawings which is an array of Drawing Objects that 
+	are returned from the fetchall() db query 
+    
+-->
+
 <h1>My Gallery</h1>
 
+<?php //$drawings = $this->drawings;?>
 
-
-<?php
-
-
-//echo "this is the Drawing directory";
-//echo var_dump($this);
-$files = $drawingNames;
-
-unset($files[0],$files[1]);
-echo '<table>';
-foreach ($files as $key => $value) {
-	echo '<img class="albumThumb" src="/img/upload/'.$value.'" width="200" height="200">';
-}
-echo '</table>';
-
-
-
-
-
-
-
-?>
+<div id="galleryBody">
+<?php foreach ($drawings as $drawing) : ?>
+	<?php //echo var_dump($drawing) ?>
+	<?php $link = $this->url('album',array('action'=>'view','id'=>$drawing->id)); ?>
+	<?php echo '<a href="'.$link.'"><img class="albumThumb" border="0" src="/img/upload/'.$this->escapeHtml($drawing->fileName).'" alt="'.$this->escapeHtml($drawing->title).'"></a>';?>
+<?php endforeach; ?>
+</div>
+ <?php //echo $_SERVER['REQUEST_TIME'] ?> 
