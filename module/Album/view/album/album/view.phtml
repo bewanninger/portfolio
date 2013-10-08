@@ -1,2 +1,15 @@
 <?php
 
+echo "heyo!";
+?>
+
+<?php foreach ($drawings as $drawing) : ?>
+<?php echo '<img class ="albumThumb" src="/img/upload/'.$this->escapeHtml($drawing->fileName).'" 
+                 alt="'.$this->escapeHtml($drawing->title).'">';?>
+
+
+<?php endforeach; ?>
+
+
+ <?php echo microtime()?> 
+ <?php echo var_dump($drawings); ?>

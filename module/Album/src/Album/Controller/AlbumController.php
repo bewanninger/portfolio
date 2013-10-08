@@ -4,13 +4,15 @@ namespace Album\Controller;
 
  use Zend\Mvc\Controller\AbstractActionController;
  use Zend\View\Model\ViewModel;
- use Album\Model\Album;          
+ use Album\Model\Album;  
+ use Album\Model\Drawing;        
  use Album\Form\AlbumForm;
  use Album\Form\UploadForm;
 
  class AlbumController extends AbstractActionController
  {
     protected $albumTable;
+    protected $drawingTable;
 
      public function indexAction()
      {
@@ -34,7 +36,6 @@ namespace Album\Controller;
             if ($form->isValid()) {
                 $album->exchangeArray($form->getData());
                 $this->getAlbumTable()->saveAlbum($album);
-
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
             }
@@ -52,14 +53,22 @@ namespace Album\Controller;
             return $prg; // Return PRG redirect response
         } elseif (is_array($prg)) {
             if ($form->isValid()) {
+                //create a copy to send to be saved to DB
+                $drawing = new Drawing();
                 $data = $form->getData();
-                //$this->data["image-file"]["tmp_name"];
-                rename($data["image-file"]["tmp_name"],"./html/img/upload/stuuupid.jpg");
+                $drawing->fileName = $data["image-file"]["name"];
+                $drawing->title = $data["text"];
+                //Write it to DB
+                //$album->exchangeArray($form->getData());
+                $this->getDrawingTable()->saveAlbum($drawing);
+                //make the Image viewable
+                chmod($data["image-file"]["tmp_name"], 0644);
                 // Form is valid, save the form!
                 return array(
                 'form'     => $form,
                 'tempFile' => $tempFile,
                 'data'     => $data,
+                'foo'      => $drawing,
                 );
                 //return $this->redirect()->toRoute('album',array('action' =>'success'));
             } else {
@@ -92,12 +101,17 @@ namespace Album\Controller;
 
      public function viewAction()
      {
+        /*
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('album', array(
                 'action' => 'gallery'
             ));
         }
+        */
+            return new ViewModel(array(
+                'drawings' => $this->getDrawingTable()->fetchAll(),
+            ));
      }
 
      public function editAction()
@@ -171,6 +185,7 @@ namespace Album\Controller;
 
      public function getAlbumTable()
      {
+        $table = "album";
          if (!$this->albumTable) {
              $sm = $this->getServiceLocator();
              $this->albumTable = $sm->get('Album\Model\AlbumTable');
@@ -178,5 +193,15 @@ namespace Album\Controller;
          return $this->albumTable;
      }
 
+
+    public function getDrawingTable()
+         {
+            $table = "Drawing";
+             if (!$this->drawingTable) {
+                 $sm = $this->getServiceLocator();
+                 $this->drawingTable = $sm->get('Album\Model\DrawingTable');
+             }
+             return $this->drawingTable;
+         }
 
  }

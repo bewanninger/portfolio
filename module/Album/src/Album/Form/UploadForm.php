@@ -18,12 +18,12 @@ class UploadForm extends Form
     {
         // File Input
         $file = new Element\File('image-file');
-        $file->setLabel('Avatar Image Upload')
+        $file->setLabel('Daily Image Upload')
              ->setAttribute('id', 'image-file');
         $this->add($file);
 
         $text = new Element\Text('text');
-        $text->setLabel('Text Entry');
+        $text->setLabel('Title');
         $this->add($text);
     }
 
@@ -37,7 +37,7 @@ class UploadForm extends Form
         $fileInput->getFilterChain()->attachByName(
             'filerenameupload',
             array(
-                'target'    => './data/tempuploads/',
+                'target'    => './html/img/upload',
                 'use_upload_name' => true,
                 'overwrite'       => true,
             )

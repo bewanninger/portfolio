@@ -1,14 +1,10 @@
 <?php
 
-//$form = $this->form;
-//$form->setAttribute('class', 'form-horizontal');
 $form->prepare(); // The correct enctype is set here ?>
 <?php echo $this->form()->openTag($form); ?>
 
     <div class="form-element">
-
-
-    	<?php
+    <?php
     $elem = $form->get('text');
     $elem->setLabelAttributes(array('class' => 'control-label'));
     $errors = $elem->getMessages();
@@ -27,8 +23,8 @@ $form->prepare(); // The correct enctype is set here ?>
         <?php echo $this->formFile($fileElement); ?>
         <?php echo $this->formElementErrors($fileElement); ?>
     </div>
-
-    <button>Submit</button>
+    </br>
+    <button>Upload</button>
 
 <?php echo $this->form()->closeTag(); ?>
 
@@ -41,10 +37,11 @@ $form->prepare(); // The correct enctype is set here ?>
 	}
 	else 
 	{
-		echo "hello";
+		echo "Please fill in the Title and select Image to Upload";
 
 		//echo file_get_contents('/img/upload/sphere.jpg');
 		//echo '<img src="/img/upload/sphere.jpg">';
 	} ?>
 
-<?php //echo var_dump($this); ?>
+<?php echo "<h3>Foo Dump</h3>"; echo var_dump($this->foo); ?>
+<?php echo "<h3>Foo Dump</h3>"; echo var_dump($this->data); ?>

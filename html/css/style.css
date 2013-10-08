@@ -39,8 +39,12 @@ div.container a.brand {
 .albumThumb {
   margin:5px;
   box-shadow: 1px 1px 5px;
+  width:200px;
+  height:200px;
 }
 
 .albumThumb:hover {
   box-shadow: 1px 1px 0px;
+  width:210px;
+  height:210px;
 }

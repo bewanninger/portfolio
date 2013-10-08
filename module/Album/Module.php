@@ -6,6 +6,8 @@ namespace Album;
  // Add these import statements:
  use Album\Model\Album;
  use Album\Model\AlbumTable;
+ use Album\Model\Drawing;
+ use Album\Model\DrawingTable;
  use Zend\Db\ResultSet\ResultSet;
  use Zend\Db\TableGateway\TableGateway;
 
@@ -39,11 +41,22 @@ namespace Album;
                      $table = new AlbumTable($tableGateway);
                      return $table;
                  },
+                 'Album\Model\DrawingTable' =>  function($sm) {
+                     $tableGateway = $sm->get('DrawingTableGateway');
+                     $table = new DrawingTable($tableGateway);
+                     return $table;
+                 },
                  'AlbumTableGateway' => function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new Album());
                      return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                 },
+                 'DrawingTableGateway' => function ($sm) {
+                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new Drawing());
+                     return new TableGateway('Drawing', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );
