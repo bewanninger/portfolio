@@ -1,0 +1,68 @@
+<?php
+/**
+ * Scraping Data from the Internet
+ * A CS50 Seminar By Keito Uchiyama
+ * November 2009
+ */
+
+// Get the raw HTML from Weather.com (requires PHP fopen wrapper for HTTP)
+$wet = file_get_contents('http://www.weather.com/weather/today/Chicago+IL+60614:4:US');
+
+// Now run a regular expression on the source to find, e.g.:
+// <B CLASS=obsTempTextA>50&deg;F</B> for 50 degrees.
+  echo "<h1>Easy Weather<h1>";
+  
+  //<span itemprop="feels-like-temperature-fahrenheit">94</span>
+  
+  if (  preg_match('/"temperature-fahrenheit"\>(\d+)<\/span>/', $wet, $matches)
+     && preg_match('/"feels-like-temperature-fahrenheit"\>(\d+)<\/span>/', $wet, $feelsLike)) {
+       echo "<h2>Current Temp:  " . $matches[1] . "&deg"." <small> Feels Like: ".$feelsLike[1]."</small></h2>";
+} else {
+  echo "Failed to parse current weather";
+}
+  
+  echo "<h3>Today's Forecast</h3>";
+  // Now do it again for Today's High
+  if (preg_match_all('/"wx-temperature"\>(\d+)<span/', $wet, $matches)) {
+    echo "<b>Today's High: </b>" . $matches[1][0] . "&deg"."<br/>";
+    echo "<b>Today's Low: </b>" . $matches[1][1] . "&deg"."<br/>";
+} else {
+  echo "Failed to parse current weather";
+}
+  //<span class="wx-meridian"> PM</span>
+  //HOURLY WEATHER PAGE LOAD AND PARSE
+  echo "<h3>Hourly Forecast</h3>";
+  $hourlyWet = file_get_contents('http://www.weather.com/weather/hourbyhour/graph/Chicago+IL+60614:4:US');
+  if (preg_match_all('/"wx-time"\>(\d+)\<span/', $hourlyWet, $hours) 
+      && preg_match_all('/meridian"\>\s(\w+)/',$hourlyWet,$AMPM)
+      && preg_match_all('@"wx-temp">\n(\d+)<sup@', $hourlyWet, $temps)
+      && preg_match_all('/wx-phrase"\>(.+)\</',$hourlyWet,$conditions))
+  {
+    for ($i=0;$i<(sizeof($hours[1]));$i++)
+         {
+           echo $hours[1][$i] . ":00 ".$AMPM[1][$i]." - ".$temps[1][$i*4]."&deg - ".$conditions[1][$i*4]."<br/>";
+           //echo " and the temp is : ".."<br/>";
+         }
+} else {
+  echo "Failed to get the hour";
+}
+  
+  //Extended Hourly
+  $XhourlyWet = file_get_contents('http://www.weather.com/weather/hourbyhour/graph/Chicago+IL+60614:4:US?pagenum=2&nextbeginIndex='.$hours[1][5]);
+  if (preg_match_all('/"wx-time"\>(\d+)\<span/', $XhourlyWet, $hours)
+      && preg_match_all('/meridian"\>\s(\w+)/',$XhourlyWet,$AMPM)
+      && preg_match_all('@"wx-temp">\n(\d+)<sup@', $XhourlyWet, $temps)
+      && preg_match_all('/wx-phrase"\>(.+)\</',$XhourlyWet,$conditions))
+  {
+    for ($i=0;$i<(sizeof($hours[1]));$i++)
+         {
+           echo $hours[1][$i] . ":00 ".$AMPM[1][$i]." - ".$temps[1][$i]."&deg - ".$conditions[1][$i]."<br/>";
+           //echo " and the temp is : ".."<br/>";
+         }
+} else {
+  echo "Failed to get the hour";
+}
+      
+  //<p class="wx-temp">88<sup class="wx-unit">°<span class="wx-scale">F</span></sup>
+  //<dt>FEELS LIKE:</dt><dd>90°</dd>
+  

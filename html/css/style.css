@@ -67,3 +67,11 @@ div.container a.brand {
   width:100%;
   height:100%;
 }
+
+#paginator {
+  margin:0px auto;
+}
+
+.pageWrapper{
+  text-align: center
+}

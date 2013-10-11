@@ -3,23 +3,62 @@
 namespace Album\Controller;
 
  use Zend\Mvc\Controller\AbstractActionController;
+ use Zend\Authentication\AuthenticationService;
+ use Zend\Session\Container;
  use Zend\View\Model\ViewModel;
  use Album\Model\Album;  
  use Album\Model\Drawing;        
  use Album\Form\AlbumForm;
  use Album\Form\UploadForm;
+ use Album\Form\LoginForm;
 
  class AlbumController extends AbstractActionController
  {
     protected $albumTable;
     protected $drawingTable;
+    protected $sessionContainer;
+
+    public function __construct()
+    {
+        $this->sessionContainer = new Container('sessionz');
+
+        $this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer'));
+    }
 
      public function indexAction()
      {
-          return new ViewModel(array(
-             'albums' => $this->getAlbumTable()->fetchAll(),
-         ));
 
+        // grab the paginator from the AlbumTable
+     $paginator = $this->getAlbumTable()->fetchAll(true);
+     // set the current page to what has been passed in query string, or to 1 if none set
+     $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
+     // set the number of items per page to 10
+     $paginator->setItemCountPerPage(10);
+
+     return new ViewModel(array(
+         'paginator' => $paginator
+     ));
+
+     }
+
+     public function loginAction()
+     {
+        $form = new LoginForm();
+        //$form->get('submit')->setValue('Add');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            //check the username and pass
+            $this->checkLogin($request);
+
+            return array('request' => $request,
+                          'form' => $form,
+                          'session' => $this->sessionContainer->offsetGet('user'),);
+        }
+        return array('form' => $form,
+                     'request' => 'nope',
+                     'session' => $this->sessionContainer,
+                     'status' => $this->userLoggedIn(),
+                     );
      }
 
      public function addAction()
@@ -45,6 +84,11 @@ namespace Album\Controller;
 
     public function uploadFormAction()
     {
+        //Check to see if the user is logged in, if not redirect to Login Page
+        if (!$this->userLoggedIn()){
+            return $this->redirect()->toRoute('album',array('action'=>'login'));
+        }
+        
         $form     = new UploadForm('upload-form');
         $tempFile = null;
 
@@ -84,6 +128,7 @@ namespace Album\Controller;
         return array(
             'form'     => $form,
             'tempFile' => $tempFile,
+            'status' => $this->userLoggedIn(),
         );
     }
 
@@ -96,6 +141,7 @@ namespace Album\Controller;
         //return array (
             //'drawingNames' => $drawingNames,
             //);
+        $this->logout();
         return new ViewModel(array(
                 'drawings' => $this->getDrawingTable()->fetchAll(),
             ));
@@ -194,6 +240,11 @@ namespace Album\Controller;
         );
      }
 
+
+     public function weatherAction()
+     {
+
+     }
      public function getAlbumTable()
      {
         $table = "album";
@@ -215,4 +266,33 @@ namespace Album\Controller;
              return $this->drawingTable;
          }
 
+
+         public function checkLogin($request){
+            $credentials = $this->sessionContainer->offsetGet('user');
+            if (($request->getPost('username',null) == $credentials['username'])
+                && ($request->getPost('password',null) == $credentials['password'])){
+                return $this->changeUserStatus();
+
+                //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer','authenticated' =>true));
+                //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
+            }
+        }
+         public function userLoggedIn(){
+            
+            return $this->sessionContainer->offsetExists('authenticated');
+         }
+
+         public function changeUserStatus(){
+            $this->sessionContainer->offsetSet('authenticated',true);
+            return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
+            
+            //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer','authenticated' =>$status));
+         }
+
+         public function logoutAction(){
+             $this->sessionContainer->offsetUnset('authenticated');
+             //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
+         }
+
+         
  }
