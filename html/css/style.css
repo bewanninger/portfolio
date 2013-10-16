@@ -54,13 +54,11 @@ div.container a.brand {
   margin-top:20px;
   border:solid rgba(2, 46, 9, 0.2);
   border-radius:5px;
+  margin-bottom: 20px
 }
 
 #galleryBody a {
   text-decoration: none;
-}
-.container {
-  
 }
 
 .mainDrawing {
@@ -74,4 +72,36 @@ div.container a.brand {
 
 .pageWrapper{
   text-align: center
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto 0px;
+  /* Pad bottom by footer height */
+  padding: 0 0 0px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #3A3A3A;
+  text-align: center;
+  padding-top:10px;
+}
+
+#footer p {
+
 }

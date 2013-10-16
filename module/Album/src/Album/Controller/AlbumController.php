@@ -26,7 +26,7 @@ namespace Album\Controller;
     {
         $this->sessionContainer = new Container('sessionz');
 
-        $this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer'));
+        //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer'));
     }
 
      public function indexAction()
@@ -48,11 +48,6 @@ namespace Album\Controller;
      public function loginAction()
      {
 
-        
-
-        $bcrypt = new Bcrypt();
-        $securePass = $bcrypt->create('palmer');
-
         $form = new LoginForm();
         //$form->get('submit')->setValue('Add');
         $request = $this->getRequest();
@@ -68,7 +63,6 @@ namespace Album\Controller;
                      'request' => 'nope',
                      'session' => $this->sessionContainer,
                      'status' => $this->userLoggedIn(),
-                     'securePass' => $securePass,
                      );
      }
 
