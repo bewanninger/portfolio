@@ -7,15 +7,19 @@ namespace Album\Controller;
  use Zend\Session\Container;
  use Zend\View\Model\ViewModel;
  use Album\Model\Album;  
- use Album\Model\Drawing;        
+ use Album\Model\Drawing;
+ use Album\Model\User;        
  use Album\Form\AlbumForm;
  use Album\Form\UploadForm;
  use Album\Form\LoginForm;
+ use Zend\Crypt\Password\Bcrypt;
+
 
  class AlbumController extends AbstractActionController
  {
     protected $albumTable;
     protected $drawingTable;
+    protected $userTable;
     protected $sessionContainer;
 
     public function __construct()
@@ -43,6 +47,12 @@ namespace Album\Controller;
 
      public function loginAction()
      {
+
+        
+
+        $bcrypt = new Bcrypt();
+        $securePass = $bcrypt->create('palmer');
+
         $form = new LoginForm();
         //$form->get('submit')->setValue('Add');
         $request = $this->getRequest();
@@ -58,6 +68,7 @@ namespace Album\Controller;
                      'request' => 'nope',
                      'session' => $this->sessionContainer,
                      'status' => $this->userLoggedIn(),
+                     'securePass' => $securePass,
                      );
      }
 
@@ -141,10 +152,10 @@ namespace Album\Controller;
         //return array (
             //'drawingNames' => $drawingNames,
             //);
-        $this->logout();
-        return new ViewModel(array(
+        //$this->logout();
+        return array(
                 'drawings' => $this->getDrawingTable()->fetchAll(),
-            ));
+            );
      }
 
 
@@ -266,11 +277,24 @@ namespace Album\Controller;
              return $this->drawingTable;
          }
 
+         public function getTable()
+         {
+            $table = "User";
+             if (!$this->userTable) {
+                 $sm = $this->getServiceLocator();
+                 $this->userTable = $sm->get('Album\Model\UserTable');
+             }
+             return $this->userTable;
+         }
+
 
          public function checkLogin($request){
-            $credentials = $this->sessionContainer->offsetGet('user');
-            if (($request->getPost('username',null) == $credentials['username'])
-                && ($request->getPost('password',null) == $credentials['password'])){
+            #$credentials = $this->sessionContainer->offsetGet('user');
+            $user = $this->getTable()->getUser($request->getPost('username',null));
+
+            $bcrypt = new Bcrypt();
+
+            if ($bcrypt->verify($request->getPost('password',null), $user->password)){
                 return $this->changeUserStatus();
 
                 //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer','authenticated' =>true));

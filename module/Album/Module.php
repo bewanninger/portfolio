@@ -8,6 +8,8 @@ namespace Album;
  use Album\Model\AlbumTable;
  use Album\Model\Drawing;
  use Album\Model\DrawingTable;
+ use Album\Model\User;
+ use Album\Model\UserTable;
  use Zend\Db\ResultSet\ResultSet;
  use Zend\Db\TableGateway\TableGateway;
 
@@ -46,6 +48,11 @@ namespace Album;
                      $table = new DrawingTable($tableGateway);
                      return $table;
                  },
+                 'Album\Model\UserTable' =>  function($sm) {
+                     $tableGateway = $sm->get('UserTableGateway');
+                     $table = new UserTable($tableGateway);
+                     return $table;
+                 },
                  'AlbumTableGateway' => function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      $resultSetPrototype = new ResultSet();
@@ -57,6 +64,12 @@ namespace Album;
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new Drawing());
                      return new TableGateway('Drawing', $dbAdapter, null, $resultSetPrototype);
+                 },
+                 'UserTableGateway' => function ($sm) {
+                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new User());
+                     return new TableGateway('User', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );

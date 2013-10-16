@@ -8,6 +8,7 @@
 <?php //$drawings = $this->drawings;?>
 
 <div id="galleryBody">
+<?php //echo var_dump($drawings)?>
 <?php foreach ($drawings as $drawing) : ?>
 	<?php //echo var_dump($drawing) ?>
 	<?php $link = $this->url('album',array('action'=>'view','id'=>$drawing->id)); ?>
