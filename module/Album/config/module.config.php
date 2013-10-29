@@ -7,8 +7,6 @@ return array(
              'Album\Controller\User' => 'Album\Controller\UserController',
          ),
      ),
-
-     
      'router' => array(
          'routes' => array(
              'album' => array(
@@ -33,4 +31,5 @@ return array(
              'album' => __DIR__ . '/../view',
          ),
      ),
+     
  );

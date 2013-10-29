@@ -54,19 +54,19 @@ namespace Album;
                      return $table;
                  },
                  'AlbumTableGateway' => function ($sm) {
-                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $dbAdapter = $sm->get('album');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new Album());
                      return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
                  },
                  'DrawingTableGateway' => function ($sm) {
-                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $dbAdapter = $sm->get('album');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new Drawing());
                      return new TableGateway('Drawing', $dbAdapter, null, $resultSetPrototype);
                  },
                  'UserTableGateway' => function ($sm) {
-                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $dbAdapter = $sm->get('album');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new User());
                      return new TableGateway('User', $dbAdapter, null, $resultSetPrototype);

@@ -1,0 +1,17 @@
+<h1>Kate's Super Dooper Health Tracker</h1>
+<?php 
+$moodForm->prepare();
+echo $this->form()->openTag($moodForm);
+#echo $this->formHidden($form->get('id'));
+#echo $this->formRow($form->get('title'));
+#echo $this->formRow($form->get('artist'));
+#echo $this->formSubmit($form->get('submit'));
+//below is the equivalent of the above 4 lines
+echo $this->formCollection($moodForm);
+echo $this->form()->closeTag();
+
+echo "This was your last mood: ".$mood->mood;
+
+echo var_dump($mood);
+
+?>
