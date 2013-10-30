@@ -149,6 +149,8 @@ namespace Album\Controller;
         //$this->logout();
         return array(
                 'drawings' => $this->getDrawingTable()->fetchAll(),
+                'drawingCount' => $this->getDrawingTable()->getDrawingCount(),
+                'dayCount' => $this->getDrawingTable()->getConsecutiveDaysCount(),
             );
      }
 

@@ -11,6 +11,7 @@ use Zend\InputFilter\InputFilterInterface;
      public $id;
      public $fileName;
      public $title;
+     public $timeStamp;
      //public $user;
      protected $inputFilter;
 
@@ -19,8 +20,10 @@ use Zend\InputFilter\InputFilterInterface;
          $this->id     = (!empty($data['DrawingId'])) ? $data['DrawingId'] : null;
          $this->fileName = (!empty($data['FileName'])) ? $data['FileName'] : null;
          $this->title  = (!empty($data['title'])) ? $data['title'] : null;
+         $this->timeStamp  = (!empty($data['TimeStamp'])) ? $data['TimeStamp'] : null;
          //$this->user  = (!empty($data['user'])) ? $data['user'] : null;
      }
+
 
      public function getArrayCopy()
     {

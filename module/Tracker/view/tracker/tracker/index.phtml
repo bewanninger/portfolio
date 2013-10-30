@@ -1,6 +1,11 @@
-<h1>Kate's Super Dooper Health Tracker</h1>
+<h1> <?=$name?>'s Health Tracker</h1>
 <?php 
 $moodForm->prepare();
+
+$foodForm->setAttribute('action', $this->url('tracker', array('action' => 'add')));
+
+$foodForm->prepare();
+
 echo $this->form()->openTag($moodForm);
 #echo $this->formHidden($form->get('id'));
 #echo $this->formRow($form->get('title'));
@@ -10,8 +15,60 @@ echo $this->form()->openTag($moodForm);
 echo $this->formCollection($moodForm);
 echo $this->form()->closeTag();
 
-echo "This was your last mood: ".$mood->mood;
-
-echo var_dump($mood);
-
+echo $this->form()->openTag($foodForm);
+echo $this->formCollection($foodForm);
+echo $this->form()->closeTag();
 ?>
+
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 1)) ?>" class="addFoodLogItem">Add 1 Donut</a></br>
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 2)) ?>" class="addFoodLogItem">Add 1 Grande Coffee With Soy and Syrup</a></br>
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 3)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Pineapple</a></br>
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 4)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Almond Coco</a></br>
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 5)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Key Lime</a></br>
+
+<div id="output"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/jquery.form.js"></script>
+<script>
+
+    /**
+     * On Ready...
+     */
+    $(function() {
+        $('#foodLog').on('submit', function(e) {
+            e.preventDefault();
+            //alert("hey!");
+
+            //$.fn.ajaxSubmit.debug = true;
+            $(this).ajaxSubmit({
+                target: '#output',
+                success: function (response, statusText, xhr, $form) {
+                    //alert("wtf");
+                },
+                error: function(a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+        $('.addFoodLogItem').on('click', function(e) {
+            //e.preventDefault();
+            link = $(this).attr('href');
+            //alert(link);
+            $(this).hide("left");
+            var jqxhr = $.ajax(link)
+                  .done(function() {
+
+                    
+                    //alert( "success" );
+
+                  })
+                  .fail(function() {
+                    alert( "error" );
+              });
+            //$.fn.ajaxSubmit.debug = true;
+            return false;
+        });
+    });
+</script>
