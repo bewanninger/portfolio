@@ -8,16 +8,24 @@ use Zend\InputFilter\InputFilterInterface;
 
  class FoodItem implements InputFilterAwareInterface
  {
-     public $id;
-     public $mood;
-     public $timeStamp;
+     public $foodId;
+     public $name;
+     public $calories;
+     public $fat;
+     public $protein;
+     public $carbs;
+     public $alcohol;
      protected $inputFilter;
 
      public function exchangeArray($data)
      {
-         $this->id     = (!empty($data['UserId'])) ? $data['UserId'] : null;
-         $this->mood = (!empty($data['Mood'])) ? $data['Mood'] : null;
-         $this->timeStamp  = (!empty($data['TimeStamp'])) ? $data['TimeStamp'] : null;
+         $this->foodId     = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
+         $this->name = (!empty($data['Name'])) ? $data['Name'] : null;
+         $this->calories = (!empty($data['Calories'])) ? $data['Calories'] : null;
+         $this->fat = (!empty($data['Fat'])) ? $data['Fat'] : null;
+         $this->protein = (!empty($data['Protein'])) ? $data['Protein'] : null;
+         $this->carbs = (!empty($data['Carbs'])) ? $data['Carbs'] : null;
+         $this->alcohol  = (!empty($data['Alcohol'])) ? $data['Alcohol'] : null;
      
          //$this->user  = (!empty($data['user'])) ? $data['user'] : null;
      }
@@ -40,7 +48,7 @@ use Zend\InputFilter\InputFilterInterface;
 
             $inputFilter->add(array(
                 'name'     => 'UserId',
-                'required' => true,
+                'required' => false,
                 'filters'  => array(
                     array('name' => 'Int'),
                 ),
@@ -48,7 +56,7 @@ use Zend\InputFilter\InputFilterInterface;
 
             $inputFilter->add(array(
                 'name'     => 'Mood',
-                'required' => true,
+                'required' => false,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),

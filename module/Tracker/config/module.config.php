@@ -11,10 +11,11 @@ return array(
              'tracker' => array(
                  'type'    => 'segment',
                  'options' => array(
-                     'route'    => '/tracker[/][:action][/:id]',
+                     'route'    => '/tracker[/][:action][/:id][/:quantity]',
                      'constraints' => array(
                          'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                          'id'     => '[0-9]+',
+                         'quantity'     => '[0-9]',
                      ),
                      'defaults' => array(
                          'controller' => 'Tracker\Controller\Tracker',

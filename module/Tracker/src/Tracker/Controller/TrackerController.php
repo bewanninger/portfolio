@@ -30,6 +30,8 @@ class TrackerController extends AbstractActionController
         $this->sessionContainer = new Container('session');
         $this->sessionContainer->offsetSet("Name","Kate");
         $this->sessionContainer->offsetSet("UserId",2);
+        $this->sessionContainer->offsetSet("Epoch",
+            strtotime("2013-09-29"));
     }
 
 	public function indexAction(){
@@ -37,14 +39,10 @@ class TrackerController extends AbstractActionController
         $foodItemForm = new FoodItemForm();
         $foodLogForm = new FoodLogForm();
 
-        $moods = $this->getMoodTable()->getMood(1);
-
         $request = $this->getRequest();
 
 
         if ($request->isPost()) {
-            echo var_dump($request);
-        die;
             $newMood = new Mood();
             $moodForm->setInputFilter($newMood->getInputFilter());
             $moodForm->setData($request->getPost());
@@ -55,12 +53,12 @@ class TrackerController extends AbstractActionController
             }
             // Redirect to list of albums
             return array('moodForm' => $moodForm,
-                'foodForm' => $foodLogForm,
+                'foodForm' => $foodItemForm,
                 'name' => $this->sessionContainer->offsetGet("Name"),
              );
         }
 		return array('moodForm' => $moodForm,
-            'foodForm' => $foodLogForm,
+            'foodForm' => $foodItemForm,
             'name' => $this->sessionContainer->offsetGet("Name"),
 			 );
 	}
@@ -76,43 +74,56 @@ class TrackerController extends AbstractActionController
          }
 
 
-         public function addAction()
+    public function addAction()
      {
         $id = (int) $this->params()->fromRoute('id', 0);
-        $form = new FoodLogForm();
-            //$request = $this->getRequest();
-            //echo var_dump($request);
+        $quantity = (int) $this->params()->fromRoute('quantity',1);
 
-        if(!$id){
+        $form = new FoodItemForm();
+
+        if(!$id){ # check to see if there was a food id passed in the uri,
+                    # If not, get the post params and look for the foodItem
+                    # redirect if item has ID, if not, add it to FoodItem table. 
             $request = $this->getRequest();
-            //echo var_dump($request);
             if ($request->isPost()) {
-                $foodItem = new FoodLog();
+                $foodItem = new FoodItem();
                 $form->setInputFilter($foodItem->getInputFilter());
                 $form->setData($request->getPost());
-                echo "yup, post";
+                //echo "yup, post";
                 if ($form->isValid()) {
                     $foodItem->exchangeArray($form->getData());
-                    echo "yup, valid";
+                    //echo "yup, valid";
+                    //$this->getFoodLogTable()->saveFoodLog($foodItem);
+                    $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
 
-                    $this->getFoodLogTable()->saveFoodLog($foodItem);
-                    // Redirect to list of albums
-                    //return $this->redirect()->toRoute('tracker');
+                    if($foodId){
+                        // Redirect to list of albums
+                        return $this->redirect()->toRoute('tracker',array('action' => 'add',
+                        'id' => $foodId,'quantity' => $quantity));
+                    } else {
+                        $this->getFoodItemTable()->saveFoodItem($foodItem);
+                        $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
+
+                        $postQuantity = $request->getPost('Quantity');
+                        $this->addItemToFoodLog($foodId,$postQuantity);
+                    }
                 }
             } 
-        } else {
-            $foodItem = new FoodLog();
-            $foodItem->foodId = $id;
-            $foodItem->quantity = 1;
-            $foodItem->userId = $this->sessionContainer->offsetGet("UserId");
-            //$foodItem = $this->getFoodItemTable->getFoodItem();
-            $this->getFoodLogTable()->saveFoodLog($foodItem);            
+        } else { 
+            #Use the URI to add an already existing food Item to the foodLog
+                  $this->addItemToFoodLog($id,$quantity); 
         }
-
-        
-
-        
         //return $this->redirect()->toRoute('tracker');
+     }
+
+
+     public function addItemToFoodLog($foodId, $quantity)
+     {
+        $foodItem = new FoodLog();
+            $foodItem->foodId = $foodId;
+            $foodItem->quantity = $quantity;
+            $foodItem->userId = $this->sessionContainer->offsetGet("UserId");
+            $this->getFoodLogTable()->saveFoodLog($foodItem);  
      }
 
      public function getFoodLogTable()
@@ -132,6 +143,6 @@ class TrackerController extends AbstractActionController
              $sm = $this->getServiceLocator();
              $this->foodItemTable = $sm->get('Tracker\Model\FoodItemTable');
          }
-         return $this->foodLogTable;
+         return $this->foodItemTable;
      }
 }

@@ -42,16 +42,17 @@ namespace Tracker\Model;
 
      public function saveFoodLog(FoodLog $newFood)
      {
-         echo var_dump($newFood);
+         //echo var_dump($newFood);
          $data = array(
              'UserId' => ((!empty($newFood->userId)) ? $newFood->userId : 999),
              'Quantity' => $newFood->quantity,
              'FoodId' => ((!empty($newFood->foodId)) ? $newFood->foodId : 999),
              'Date' => Date('Y-m-d'),
          );
-         echo var_dump($data);
+         //echo var_dump($data);
          //die;
          //$id = (int) $newFood->foodId;
+         //echo "Yo, it did not save because it is commented out";
          $this->tableGateway->insert($data);
      }
 

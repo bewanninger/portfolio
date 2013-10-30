@@ -8,14 +8,14 @@ class FoodItemForm extends Form
     public function __construct($name = null)
     {
         // we want to ignore the name passed
-        parent::__construct('food');
+        parent::__construct('foodItem');
 
         $this->add(array(
             'name' => 'UserId',
             'type' => 'Hidden',
         ));
         $this->add(array(
-            'name' => 'Food',
+            'name' => 'Name',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Food Item',

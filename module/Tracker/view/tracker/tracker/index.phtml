@@ -20,7 +20,7 @@ echo $this->formCollection($foodForm);
 echo $this->form()->closeTag();
 ?>
 
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 1)) ?>" class="addFoodLogItem">Add 1 Donut</a></br>
+<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 1)) ?>" class="addFoodLogItem"><button type="button">Add 1 Donut</button></a></br>
 <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 2)) ?>" class="addFoodLogItem">Add 1 Grande Coffee With Soy and Syrup</a></br>
 <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 3)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Pineapple</a></br>
 <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 4)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Almond Coco</a></br>
@@ -36,7 +36,7 @@ echo $this->form()->closeTag();
      * On Ready...
      */
     $(function() {
-        $('#foodLog').on('submit', function(e) {
+        $('#foodItem').on('submit', function(e) {
             e.preventDefault();
             //alert("hey!");
 
@@ -50,6 +50,7 @@ echo $this->form()->closeTag();
                     console.log(a, b, c);
                 }
             });
+            return false;
         });
 
         $('.addFoodLogItem').on('click', function(e) {

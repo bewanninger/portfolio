@@ -18,16 +18,34 @@ namespace Tracker\Model;
          return $resultSet;
      }
 
-     public function getMood($id)
+     public function getFoodItem($id)
      {
          $id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('UserId' => $id));
+         $rowset = $this->tableGateway->select(array('FoodId' => $id));
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");
          }
          return $row;
      }
+
+     public function getFoodId(FoodItem $foodItem)
+     {
+        #todo
+        //echo var_dump($foodItem);
+        $foodName = $foodItem->name;
+        $rowset = $this->tableGateway->select(array('Name' => $foodName));
+        $row = $rowset->current();
+        //echo "This is row!:";
+        //echo var_dump($row->foodId);
+        if(!$row) {
+            return false;
+        }
+        $id = $row->foodId;
+        //$id = 1;
+        return $id;
+     }
+
 
      public function getMoodHistory($id)
      {
@@ -40,29 +58,25 @@ namespace Tracker\Model;
          return $rowset;
      }
 
-     public function saveMood(Mood $newMood)
+     public function saveFoodItem(FoodItem $newFood)
      {
-         //echo var_dump($newMood);
+         //echo var_dump($newFood);
          //die;
          $data = array(
-             'Mood' => $newMood->mood,
-             'UserId'  => "1",
+             'Name' => $newFood->name,
+             'Calories'  => ((!empty($newFood->calories)) ? $newFood->calories : 999),
+             'Carbs' => ((!empty($newFood->carbs)) ? $newFood->carbs : 999),
+             'Fat' => ((!empty($newFood->fat)) ? $newFood->fat : 999),
+             'Protein' => ((!empty($newFood->protein)) ? $newFood->protein : 999),
+             'Alcohol' => ((!empty($newFood->alcohol)) ? $newFood->alcohol : 999),
              //'user'  => $album->user,
          );
-
-         $id = (int) $newMood->id;
-         if ($id == 0) {
-             $this->tableGateway->insert($data);
-         } else {
-             if ($this->getMood($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
-             } else {
-                 throw new \Exception('Album id does not exist');
-             }
-         }
+         //echo "Not saving to fooditem table becuase of comments";
+        $this->tableGateway->insert($data);
+         
      }
 
-     public function deleteAlbum($id)
+     public function deleteFood($id)
      {
          $this->tableGateway->delete(array('id' => (int) $id));
      }
