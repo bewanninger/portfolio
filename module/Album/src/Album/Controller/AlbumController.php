@@ -32,7 +32,7 @@ namespace Album\Controller;
      public function indexAction()
      {
 
-        // grab the paginator from the AlbumTable
+     // grab the paginator from the AlbumTable
      $paginator = $this->getAlbumTable()->fetchAll(true);
      // set the current page to what has been passed in query string, or to 1 if none set
      $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
@@ -247,10 +247,24 @@ namespace Album\Controller;
         );
      }
 
+     public function dashboardAction()
+     {
+        /*
+        $zipcode = (int) $this->params()->fromRoute('id', 60614);
+        $zip = "<li>".$zipcode."</li>\n";
+        file_put_contents('./html/img/quotes_html.txt',$zip,FILE_APPEND);
+        */
+        $lines = file('./html/img/quotes_html.txt');
+        $quote =  $lines[array_rand($lines)] ; 
+        return array(
+            'quote'=>$quote);
+     }
+
 
      public function weatherAction()
      {
-
+        $zipcode = (int) $this->params()->fromRoute('id', 60614);
+        return array('zipcode' =>$zipcode);
      }
      public function getAlbumTable()
      {
