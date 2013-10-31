@@ -1,43 +1,71 @@
-<h1> <?=$name?>'s Health Tracker</h1>
-<?php 
-$moodForm->prepare();
+<div class="row row-offcanvas row-offcanvas-right">
 
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <h2> <?=$name?>'s Health Tracker</h2>
+            <p>This is the beginnings of a health tracker. You can now log your current mood, and food intake. Soon you will be able to add goals, and track input over time.</p>
+          </div>
+          <div class="row">
+            <?php
 $foodForm->setAttribute('action', $this->url('tracker', array('action' => 'add')));
-
 $foodForm->prepare();
-
-echo $this->form()->openTag($moodForm);
-#echo $this->formHidden($form->get('id'));
-#echo $this->formRow($form->get('title'));
-#echo $this->formRow($form->get('artist'));
-#echo $this->formSubmit($form->get('submit'));
-//below is the equivalent of the above 4 lines
-echo $this->formCollection($moodForm);
-echo $this->form()->closeTag();
-
 echo $this->form()->openTag($foodForm);
 echo $this->formCollection($foodForm);
 echo $this->form()->closeTag();
 ?>
+          </div><!--/row-->
+        </div><!--/span-->
 
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 1)) ?>" class="addFoodLogItem"><button type="button">Add 1 Donut</button></a></br>
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 2)) ?>" class="addFoodLogItem">Add 1 Grande Coffee With Soy and Syrup</a></br>
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 3)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Pineapple</a></br>
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 4)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Almond Coco</a></br>
-<a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 5)) ?>" class="addFoodLogItem">Add 1 Chobani Flip - Key Lime</a></br>
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            
 
-<div id="output"></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+          <div class="list-group">
+            <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 14)) ?>" class="addFoodLogItem"><button class = "btn btn-default" type="button">
+            <span class="glyphicon glyphicon-plus"></span> 1 Luna Bar</button></a>
+            <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 2)) ?>" class="addFoodLogItem"><button class = "btn btn-default" type="button">
+            <span class="glyphicon glyphicon-plus"></span> 1 Grande Coffee W Soy and Syrup</button></a>
+            <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 3)) ?>" class="addFoodLogItem"><button class = "btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span> 1 Chobani Flip - Pineapple</button></a>
+            <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 4)) ?>" class="addFoodLogItem"><button class = "btn btn-default" type="button">
+            <span class="glyphicon glyphicon-plus"></span> 1 Chobani Flip - Almond Coco</button></a>
+            <a href="<?php echo $this->url('tracker', array('action' => 'add', 'id' => 5)) ?>" class="addFoodLogItem"><button class = "btn btn-default" type="button">
+            <span class="glyphicon glyphicon-plus"></span> 1 Chobani Flip - Key Lime</button></a>
+          </div>
+          <?php 
+                $moodForm->setAttribute('action', $this->url('tracker', array('action' => 'addMood')));
+                $moodForm->prepare();
+                echo $this->form()->openTag($moodForm);
+                echo $this->formCollection($moodForm);
+                echo $this->form()->closeTag();
+            ?>
+            <div id="output">
+            </div>
+        </div><!--/span-->
+
+
+
+
+
+
+
+</div>
+
+
 <script src="/js/jquery.form.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 
     /**
      * On Ready...
      */
     $(function() {
+        $("#output").hide();
+        /*
         $('#foodItem').on('submit', function(e) {
-            e.preventDefault();
+            //e.preventDefault();
             //alert("hey!");
 
             //$.fn.ajaxSubmit.debug = true;
@@ -53,23 +81,86 @@ echo $this->form()->closeTag();
             return false;
         });
 
+        $('#mood').on('submit', function(e) {
+            e.preventDefault();
+            //alert("hey!");
+            $(this).hide();
+            //$.fn.ajaxSubmit.debug = true;
+            $(this).ajaxSubmit({
+                target: '#output',
+                success: function (response, statusText, xhr, $form) {
+                    alert("wtf");
+                    //$(#output).html("<p>All new content. <em>You bet!</em></p>");
+                },
+                error: function(a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+            return false;
+        });
+*/
+        $('#foodItem').on("submit", function(e) {
+            e.preventDefault();
+            var formurl = '<?php echo $this->url('tracker',array('action'=>'add')) ?>';
+            var foodItem = $('input[name=Name]').val();
+            //alert(foodItem);
+            $.ajax({
+            url: formurl,
+            type: 'POST',
+            ascyn: false,
+            data: $('#foodItem').serialize(),
+            success: function(data) {
+                       $('#output').prepend("<p>"+foodItem + " was added to today's log!</p>")
+                       $('#output').show();
+                       $("#output").effect("highlight",{color:"#D8A9DA"},1500);
+                       return false;
+                     }
+            });
+        });
+
+
+
         $('.addFoodLogItem').on('click', function(e) {
             //e.preventDefault();
             link = $(this).attr('href');
             //alert(link);
-            $(this).hide("left");
+            $(this).hide("drop",{direction: "up"},"fast");
             var jqxhr = $.ajax(link)
                   .done(function() {
-
-                    
                     //alert( "success" );
-
                   })
                   .fail(function() {
                     alert( "error" );
               });
-            //$.fn.ajaxSubmit.debug = true;
             return false;
         });
+
+        
+
+        $('#mood').on("submit", function(e) {
+            e.preventDefault();
+            var formurl = '<?php echo $this->url('tracker',array('action'=>'addMood')) ?>';
+            var mood = $('input[name=Mood]').val();
+            //alert(foodItem);
+            $.ajax({
+            url: formurl,
+            type: 'POST',
+            ascyn: false,
+            data: $('#mood').serialize(),
+            success: function(data) {
+                        $('#mood').hide("slow");
+                       $('#output').prepend("<p>"+ mood + " was added to today's mood log!</p>")
+                       $('#output').show();
+                       $("#output").effect("highlight",{color:"#D8A9DA"},1500);
+                       return false;
+                     }
+            });
+        });
+
+
+
+
+
+
     });
 </script>

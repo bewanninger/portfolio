@@ -10,6 +10,7 @@ class MoodForm extends Form
         // we want to ignore the name passed
         parent::__construct('mood');
 
+        $this->setAttribute('class','form-horizontal');
         $this->add(array(
             'name' => 'UserId',
             'type' => 'Hidden',
@@ -19,6 +20,7 @@ class MoodForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'What\'s your mood?',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -27,6 +29,7 @@ class MoodForm extends Form
             'attributes' => array(
                 'value' => 'Track It!',
                 'id' => 'submitbutton',
+                'class' => 'btn btn-primary',
             ),
         ));
     }

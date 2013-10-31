@@ -20,6 +20,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Food Item',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -27,6 +28,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Quantity',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -34,6 +36,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Calories',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -41,6 +44,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Fat',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -48,6 +52,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Carbs',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -55,6 +60,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Protein',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -62,6 +68,7 @@ class FoodLogForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Alcohol',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -70,6 +77,7 @@ class FoodLogForm extends Form
             'attributes' => array(
                 'value' => 'Track It!',
                 'id' => 'submitbutton',
+                
             ),
         ));
     }
