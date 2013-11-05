@@ -53,6 +53,37 @@ echo $this->form()->closeTag();
 
 </div>
 
+<!-- Daily Log of Items-->
+<?php //echo var_dump($today->current()) ?>
+<div class="row" id="dailyLogContainer">
+<div class="col-md-3">
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>What Have I Had Today?<h4></div>
+<ul>
+<?php foreach ($today as $item) : ?>
+  <?php echo '<li>'.floor($item->quantity).' '.$item->foodName.'</li>';?>
+<?php endforeach; ?>
+</ul>
+</div>
+</div> <!-- column -->
+
+<div class="col-md-3">
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Totals<h4></div>
+<ul>
+<!-- Daily Log of Calories
+<?=var_dump($dailyStats)   ?> -->
+<?php foreach ($dailyStats as $cat=>$stat) : ?>
+  <?php //echo var_dump($drawing) ?>
+  
+  <?php echo '<li>'.ucfirst($cat).' '.floor($stat).'</li>';?>
+<?php endforeach; ?>
+
+</ul>
+</div>
+</div> <!-- column -->
+</div> <!-- Daily Log Container -->
+
 
 <script src="/js/jquery.form.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -63,47 +94,16 @@ echo $this->form()->closeTag();
      */
     $(function() {
         $("#output").hide();
-        /*
-        $('#foodItem').on('submit', function(e) {
-            //e.preventDefault();
-            //alert("hey!");
 
-            //$.fn.ajaxSubmit.debug = true;
-            $(this).ajaxSubmit({
-                target: '#output',
-                success: function (response, statusText, xhr, $form) {
-                    //alert("wtf");
-                },
-                error: function(a, b, c) {
-                    console.log(a, b, c);
-                }
-            });
-            return false;
-        });
-
-        $('#mood').on('submit', function(e) {
-            e.preventDefault();
-            //alert("hey!");
-            $(this).hide();
-            //$.fn.ajaxSubmit.debug = true;
-            $(this).ajaxSubmit({
-                target: '#output',
-                success: function (response, statusText, xhr, $form) {
-                    alert("wtf");
-                    //$(#output).html("<p>All new content. <em>You bet!</em></p>");
-                },
-                error: function(a, b, c) {
-                    console.log(a, b, c);
-                }
-            });
-            return false;
-        });
-*/
+        //call to add action with food item
         $('#foodItem').on("submit", function(e) {
             e.preventDefault();
             var formurl = '<?php echo $this->url('tracker',array('action'=>'add')) ?>';
             var foodItem = $('input[name=Name]').val();
             //alert(foodItem);
+
+            
+
             $.ajax({
             url: formurl,
             type: 'POST',
@@ -116,6 +116,9 @@ echo $this->form()->closeTag();
                        return false;
                      }
             });
+
+            //clear the form after submitted
+            $(this).closest('form').find("input[type=text], textarea").val("");
         });
 
 

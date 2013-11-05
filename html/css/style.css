@@ -187,3 +187,21 @@ body {
 .main-content{
   min-height: 600px;
 }
+
+/* Data Tracker Styles 
+______________________________________*/
+#graphDisplay button{
+  margin:10px 10px 10px 10px;
+  width: 80%;
+}
+
+#graphDisplay{
+  background-color:rgb(255,255,255);
+  border:1px solid black;
+}
+
+#graphDisplay .col-md-2
+{
+  text-align: center;
+  padding-top:20px;
+}

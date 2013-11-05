@@ -39,9 +39,12 @@ class TrackerController extends AbstractActionController
         $foodItemForm = new FoodItemForm();
         $foodLogForm = new FoodLogForm();
 
+        
 		return array('moodForm' => $moodForm,
             'foodForm' => $foodItemForm,
             'name' => $this->sessionContainer->offsetGet("Name"),
+            'today' => $this->getFoodLogTable()->getTodayLog(),
+            'dailyStats' => $this->getFoodLogTable()->getDailyStats(),
 			 );
 	}
     
@@ -68,8 +71,9 @@ class TrackerController extends AbstractActionController
 
             if ($moodForm->isValid()){
                 $newMood->exchangeArray($moodForm->getData());
+                $newMood->id = $this->sessionContainer->offsetGet('UserId');
                 $this->getMoodTable()->saveMood($newMood);
-                return false;
+                return array("moodForm" =>$moodForm);
             }
             
         }
@@ -123,6 +127,29 @@ class TrackerController extends AbstractActionController
         //return $this->redirect()->toRoute('tracker');
      }
 
+     public function dashboardAction()
+     {
+        $id = (int) $this->params()->fromRoute('id', 0);
+
+        $day = 60*60*24;
+        $weekDates = array();
+        $weekDays = "[";
+        for ($i=0;$i<7;$i++){
+            $dayTime = time()-($day*$i);
+            array_push($weekDates,date('Y-m-d',$dayTime));
+            $weekDays .= '"'.date('l', $dayTime).'",'; 
+        }
+        $weekDays = rtrim($weekDays, ",")."]";
+        //$weekDays .= "]";
+
+        $weekStats = $this->getFoodLogTable()->getWeeklyStats($weekDates);
+        $weekChartData = $this->formatChartData($weekStats);
+
+        return array('weekDays'=>$weekDays,
+                    'weekData' => $weekChartData);
+
+     }
+
 
      public function addItemToFoodLog($foodId, $quantity)
      {
@@ -142,6 +169,32 @@ class TrackerController extends AbstractActionController
          }
          return $this->foodLogTable;
      }
+
+     public function formatChartData($weeklyStats)
+     {
+        $chartData = array("calories" => "[",
+                            "fat" => "[",
+                            "carbs" => "[",
+                            "protein" => "[",
+                            "alcohol" => "[");
+        $categories = array("calories","fat","carbs","protein","alcohol");
+        foreach($weeklyStats as $dailyStat)
+        {
+            foreach($categories as $cat)
+            {
+                $chartData[$cat] .= '"'.$dailyStat[$cat].'",';
+                
+            }
+        }
+        foreach($categories as $cat)
+            {
+                $chartData[$cat] = rtrim($chartData[$cat], ",")."]";
+                
+            }
+                return $chartData;
+     }
+
+
 
      public function getFoodItemTable()
      {

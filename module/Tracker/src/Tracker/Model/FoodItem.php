@@ -55,8 +55,44 @@ use Zend\InputFilter\InputFilterInterface;
             ));
 
             $inputFilter->add(array(
-                'name'     => 'Mood',
+                'name'     => 'Quantity',
                 'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Calories',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Fat',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Carbs',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Protein',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name'     => 'Name',
+                'required' => True,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
@@ -67,7 +103,7 @@ use Zend\InputFilter\InputFilterInterface;
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 15,
                         ),
                     ),
                 ),

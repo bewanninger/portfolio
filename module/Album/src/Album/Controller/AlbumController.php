@@ -14,6 +14,12 @@ namespace Album\Controller;
  use Album\Form\LoginForm;
  use Zend\Crypt\Password\Bcrypt;
 
+        use Zend\Mail\Message;
+        use Zend\Mail\Transport\Smtp as SmtpTransport;
+        use Zend\Mime\Message as MimeMessage;
+        use Zend\Mime\Part as MimePart;
+        use Zend\Mail\Transport\SmtpOptions;
+
 
  class AlbumController extends AbstractActionController
  {
@@ -249,15 +255,81 @@ namespace Album\Controller;
 
      public function dashboardAction()
      {
+        if (!$this->userLoggedIn()){
+            return $this->redirect()->toRoute('album',array('action'=>'login'));
+        }
         /*
         $zipcode = (int) $this->params()->fromRoute('id', 60614);
         $zip = "<li>".$zipcode."</li>\n";
         file_put_contents('./html/img/quotes_html.txt',$zip,FILE_APPEND);
         */
+
+        //$this->sendEmail();
+
         $lines = file('./html/img/quotes_html.txt');
         $quote =  $lines[array_rand($lines)] ; 
         return array(
-            'quote'=>$quote);
+            'quote'=>$quote,
+            'theme'=>$this->getTheme(),
+            );
+     }
+
+     public function getTheme()
+     {
+            $date = date('F jS');
+            // Get the raw HTML from Reddit.com using cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "http://www.reddit.com/r/SketchDaily/");
+            curl_setopt($ch, CURLOPT_USERAGENT,
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $ret = curl_exec($ch);
+            curl_close($ch);
+            if ($ret === false) {
+              echo "Could not fetch Reddit.com page";
+              exit;
+            }
+            $page = $ret;
+
+              if (preg_match("/>$date - (.*?)<\/a>/", $page, $matches))
+                 {
+                    return $matches[1];
+                   
+            } else {
+              return "Failed Find Today's Theme";
+            }
+     }
+
+     public function sendEmail()
+     {
+        $message = new Message();
+        $message->addTo('ben.wanninger@gmail.com')
+            ->addFrom('dailysketch@benwann.net', 'Ben at Daily Sketch')
+            ->setSubject('I sent this using the Health Tracker Website!');
+            
+        // Setup SMTP transport using LOGIN authentication
+        $transport = new SmtpTransport();
+        $options   = new SmtpOptions(array(
+            'host'              => 'mail.benwann.net',
+            'connection_class'  => 'login',
+            'connection_config' => array(
+                'ssl'       => 'tls',
+                'username' => 'dailysketch@benwann.net',
+                'password' => 'trcker23'
+            ),
+            'port' => 587,
+        ));
+         
+        $html = new MimePart('<b>heii, <i>sorry</i>, i\'m going late</b>');
+        $html->type = "text/html";
+         
+        $body = new MimeMessage();
+        $body->addPart($html);
+         
+        $message->setBody($body);
+         
+        $transport->setOptions($options);
+        $transport->send($message);
      }
 
 

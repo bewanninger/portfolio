@@ -46,20 +46,11 @@ namespace Tracker\Model;
          //die;
          $data = array(
              'Mood' => $newMood->mood,
-             'UserId'  => "1",
+             'UserId'  => $newMood->id,
              //'user'  => $album->user,
          );
-
-         $id = (int) $newMood->id;
-         if ($id == 0) {
              $this->tableGateway->insert($data);
-         } else {
-             if ($this->getMood($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
-             } else {
-                 throw new \Exception('Album id does not exist');
-             }
-         }
+         
      }
 
      public function deleteAlbum($id)

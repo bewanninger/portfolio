@@ -64,11 +64,11 @@ namespace Tracker\Model;
          //die;
          $data = array(
              'Name' => $newFood->name,
-             'Calories'  => ((!empty($newFood->calories)) ? $newFood->calories : 999),
-             'Carbs' => ((!empty($newFood->carbs)) ? $newFood->carbs : 999),
-             'Fat' => ((!empty($newFood->fat)) ? $newFood->fat : 999),
-             'Protein' => ((!empty($newFood->protein)) ? $newFood->protein : 999),
-             'Alcohol' => ((!empty($newFood->alcohol)) ? $newFood->alcohol : 999),
+             'Calories'  => ((!empty($newFood->calories)) ? $newFood->calories : 0),
+             'Carbs' => ((!empty($newFood->carbs)) ? $newFood->carbs : 0),
+             'Fat' => ((!empty($newFood->fat)) ? $newFood->fat : 0),
+             'Protein' => ((!empty($newFood->protein)) ? $newFood->protein : 0),
+             'Alcohol' => ((!empty($newFood->alcohol)) ? $newFood->alcohol : 0),
              //'user'  => $album->user,
          );
          //echo "Not saving to fooditem table becuase of comments";
@@ -80,4 +80,7 @@ namespace Tracker\Model;
      {
          $this->tableGateway->delete(array('id' => (int) $id));
      }
+
+     
+
  }

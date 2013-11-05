@@ -1,0 +1,148 @@
+<h1>Data Tracker</h1>
+<h5>I know, the colors are hideous. Already made a PT ticket.</h5>
+<div class="row" id="graphDisplay">
+<div class="col-md-2">
+<p><b>Click To Compare</b></p>
+<div class="container" id="buttonContainer">
+<button value="calories" class="btn btn-defualt">Calories</button>
+<button value="carbs" class="btn btn-defualt">Carbs (g)</button>
+<button value="fat" class="btn btn-defualt">Fat (g)</button>
+<button value="protein" class="btn btn-defualt">Protein (g)</button>
+<button value="alcohol" class="btn btn-defualt">Alcohol (g)</button>
+</div> <!-- button container -->
+</div> <!-- column -->
+
+<div class="col-md-8">
+<canvas id="myChart" width="800" height="400"></canvas>
+</div> <!-- column -->
+</div> <!-- row -->
+
+<script>
+
+var data = {
+	labels : <?php echo $weekDays ?>,
+	datasets : [
+		{
+			fillColor : "rgba(220,220,220,0.5)",
+			strokeColor : "rgba(220,220,220,1)",
+			data : <?=$weekData['carbs'] ?>
+		},
+		{
+			fillColor : "rgba(151,187,205,0.5)",
+			strokeColor : "rgba(151,187,205,1)",
+			data : <?=$weekData['fat'] ?>
+		}
+	]
+};
+
+var data2 = {
+	labels : <?php echo $weekDays ?>,
+	datasets : [
+		{
+			fillColor : "rgba(220,220,220,0.5)",
+			strokeColor : "rgba(220,220,220,1)",
+			data : <?=$weekData['protein'] ?>
+		},
+		{
+			fillColor : "rgba(151,187,205,0.5)",
+			strokeColor : "rgba(151,187,205,1)",
+			data : <?=$weekData['alcohol'] ?>
+		}
+	]
+};
+
+
+//Get the context of the canvas element we want to select
+var ctx = document.getElementById("myChart").getContext("2d");
+var myNewChart = new Chart(ctx).Bar(data);
+
+//Get context with jQuery - using jQuery's .get() method.
+//var ctx = $("#myChart").get(0).getContext("2d");
+//This will get the first returned node in the jQuery collection.
+//var myNewChart = new Chart(ctx);
+
+//new Chart(ctx).Bar(data,options);
+
+
+
+</script>
+
+<script src="/js/jquery.form.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+	var categoryColor = {};
+	categoryColor['calories'] = "rgba(255, 0, 0,.5)";
+	categoryColor['carbs'] = "rgba(0, 255, 0,.5)";
+	categoryColor['fat'] = "rgba(0, 0, 255,.5)";
+	categoryColor['protein'] = "rgba(255, 255, 0,.5)";
+	categoryColor['alcohol'] = "rgba(0, 255, 255,.5)";
+
+	var categoryData ={};
+	<?php foreach ($weekData as $cat=>$stat) : ?>
+  	<?php echo 'categoryData["'.$cat.'"] = '.$stat.';';?>
+	<?php endforeach; ?>
+
+    /**
+     * On Ready...
+     */
+     function updateGraph(bt)
+     {
+
+     	var dataSet = [];
+     	var dataString = ""
+     	$('#graphDisplay.row button').each(function() {
+     		if ($(this).css("background-color") != "rgb(192, 192, 192)")
+     		{
+  				dataString += "{fillColor : '"+categoryColor[$(this).val()]+"',strokeColor : 'rgba(0,0,0,1)',data : ["+categoryData[$(this).val()]+"]}, ";
+     		}
+     	});
+
+     	eval("dataSet =["+dataString+"]");
+     	var data3 = {
+			labels : <?php echo $weekDays ?>,
+			datasets : dataSet
+		};
+		console.log("data string: dataString");
+		
+		console.log(dataSet);
+		console.log(data3);
+		
+		//eval('var dataObj='+newData);
+		//console.log(dataObj);
+
+            var myNewChart = new Chart(ctx).Bar(data3);
+
+
+     }
+
+     function toggleColor(bt)
+     {
+     	if ($(bt).css("background-color") != "rgb(192, 192, 192)")
+     	{
+     		$(bt).css("background-color","rgb(192, 192, 192)");
+     	}
+     	else
+     	{
+     		$(bt).css("background-color",categoryColor[bt.value]);
+     	}
+     }
+
+    $(function() {
+        //$("#output").hide();
+
+        //call to add action with food item
+
+        $('#graphDisplay.row button').on('click', function(e) {
+            //e.preventDefault();
+            //link = $(this).attr('href');
+            //alert(link);
+            //$('#myChart').hide("drop",{direction: "up"},"fast");
+            toggleColor(this);
+            updateGraph(this);
+            
+        });
+
+
+
+    });
+</script>
