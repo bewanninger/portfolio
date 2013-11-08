@@ -234,7 +234,11 @@ class TrackerController extends AbstractActionController
 
 
     public function logoutAction(){
-             $this->sessionContainer->offsetUnset('authenticated','Name','UserId');
+             $this->sessionContainer->offsetUnset('authenticated');
+             $this->sessionContainer->offsetUnset('Name');
+             $this->sessionContainer->offsetUnset('userId');
+
+
              //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
          }
 
