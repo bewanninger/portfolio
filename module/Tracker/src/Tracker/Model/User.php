@@ -6,34 +6,20 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
- class FoodLog implements InputFilterAwareInterface
+ class User implements InputFilterAwareInterface
  {
-     public $userId;
-     public $foodId;
-     public $foodName;
-     public $date;
-     public $quantity;
-     public $calories;
-     public $fat;
-     public $protein;
-     public $carbs;
-     public $alcohol;
+     public $id;
+     public $username;
+     public $password;
+     public $salt;
      protected $inputFilter;
 
      public function exchangeArray($data)
      {
-         $this->userId     = (!empty($data['UserId'])) ? $data['UserId'] : null;
-         $this->foodId = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
-         $this->date  = (!empty($data['Date'])) ? $data['Date'] : null;
-         $this->quantity  = (!empty($data['Quantity'])) ? $data['Quantity'] : null;
-         $this->foodName  = (!empty($data['Name'])) ? $data['Name'] : null;
-         $this->calories = (!empty($data['Calories'])) ? $data['Calories'] : null;
-         $this->fat = (!empty($data['Fat'])) ? $data['Fat'] : null;
-         $this->protein = (!empty($data['Protein'])) ? $data['Protein'] : null;
-         $this->carbs = (!empty($data['Carbs'])) ? $data['Carbs'] : null;
-         $this->alcohol  = (!empty($data['Alcohol'])) ? $data['Alcohol'] : null;
-     
-         //$this->user  = (!empty($data['user'])) ? $data['user'] : null;
+         $this->id     = (!empty($data['UserId'])) ? $data['UserId'] : null;
+         $this->username = (!empty($data['Name'])) ? $data['Name'] : null;
+         $this->password  = (!empty($data['Password'])) ? $data['Password'] : null;
+         $this->salt  = (!empty($data['Salt'])) ? $data['Salt'] : null;
      }
 
      public function getArrayCopy()
@@ -53,23 +39,16 @@ use Zend\InputFilter\InputFilterInterface;
             $inputFilter = new InputFilter();
 
             $inputFilter->add(array(
-                'name'     => 'FoodId',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            ));
-            $inputFilter->add(array(
-                'name'     => 'UserId',
-                'required' => false,
+                'name'     => 'id',
+                'required' => true,
                 'filters'  => array(
                     array('name' => 'Int'),
                 ),
             ));
 
             $inputFilter->add(array(
-                'name'     => 'Mood',
-                'required' => false,
+                'name'     => 'artist',
+                'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
@@ -86,6 +65,24 @@ use Zend\InputFilter\InputFilterInterface;
                 ),
             ));
 
+            $inputFilter->add(array(
+                'name'     => 'title',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
+                        ),
+                    ),
+                ),
+            ));
 
             $this->inputFilter = $inputFilter;
         }

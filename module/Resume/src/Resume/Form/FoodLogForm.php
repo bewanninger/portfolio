@@ -3,25 +3,24 @@ namespace Tracker\Form;
 
 use Zend\Form\Form;
 
-class FoodItemForm extends Form
+class FoodLogForm extends Form
 {
     public function __construct($name = null)
     {
         // we want to ignore the name passed
-        parent::__construct('foodItem');
+        parent::__construct('foodLog');
 
+        
         $this->add(array(
             'name' => 'UserId',
             'type' => 'Hidden',
         ));
         $this->add(array(
-            'name' => 'Name',
+            'name' => 'Food',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Food Item',
-            ),
-            'attributes' => array(
-                'id' => 'name',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -29,25 +28,15 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Quantity',
-            ),
-            'attributes' => array(
-                'id' => 'quantity',
+                'class' => 'form-control',
             ),
         ));
-
-
         $this->add(array(
             'name' => 'Calories',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Calories',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'calories',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -55,13 +44,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Fat',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'fat',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -69,13 +52,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Carbs',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'carbs',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -83,13 +60,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Protein',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'protein',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -97,22 +68,16 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Alcohol',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'alcohol',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Add To Food Log',
+                'value' => 'Track It!',
                 'id' => 'submitbutton',
-                'class' => 'btn btn-primary'
+                
             ),
         ));
     }

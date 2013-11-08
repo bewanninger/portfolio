@@ -1,0 +1,76 @@
+body {
+  background-color:rgb(120, 135, 211);
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+#foodItem{
+  background-color:rgba(172, 172, 219, 0.57);
+  border-radius: 10px;
+  margin: 12px;
+  padding: 10px 10% 10px 10%;
+  border:1px solid white;
+}
+
+label{
+margin-right: 5px;
+min-width:45%;
+}
+
+.addFoodLogItem button.btn.btn-default{
+  white-space: normal;
+  min-width:100%;
+}
+
+#foodItem input{
+  margin-left: 10px;
+}
+
+#foodItem span{
+  float:left;
+  min-width:70px;
+}
+
+#foodItem .btn{
+  min-width:40%;
+}
+.jumbotron{
+  text-align: center;
+  background-color: rgba(238, 238, 238, 0.82);
+}
+
+#sidebar{
+  background-color: rgba(202, 204, 209, 0.71);
+  border: 5px solid rgb(216, 169, 218);
+  text-align:center;
+}
+
+#sidebar button {
+  margin:5px 0px 5px 0px;
+  padding-bottom: 10px;
+  padding-top:10px;
+}
+form {
+  background-color: rgb(194, 193, 193);
+  padding:20px;
+}
+
+#mood{
+  background-color:rgb(120, 135, 211);
+  margin-bottom:10px;
+  border:1px solid white;
+}
+
+#output{
+  background-color:rgb(120, 135, 211);
+  border:1px solid rgb(216, 169, 218);
+  margin-bottom:10px;
+  padding:5px;
+}
+
+#mood .btn{
+  min-width:80%;
+}
+
+.data {
+  display:none;
+}

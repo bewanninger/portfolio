@@ -1,5 +1,13 @@
 <?php echo $this->doctype(); ?>
 
+<?php
+// get the sessions userName if there is one, if not address them as guest in navbar
+$children = $this->viewModel()->getCurrent()->getChildren();
+$child = $children[0];
+$userName   = (!empty($child->name)) ? $child->name : "Guest"; 
+?>
+
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -67,10 +75,10 @@
                     <ul class="nav navbar-nav navbar-right">
                       <!-- <li><a href="<?php echo $this->url('album',array('action'=>'login')) ?>">Login</a></li> -->
                       <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login/Logout<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?="Logged in as ".$this->escapeHtml($userName) ?><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                          <li><a href="<?php echo $this->url('album',array('action'=>'login')) ?>">Login</a></li>
-                          <li><a href="<?php echo $this->url('album',array('action'=>'logout')) ?>">Logout</a></li>
+                          <li><a href="<?php echo $this->url() ?>login">Login</a></li>
+                          <li><a href="<?php echo $this->url() ?>logout">Logout</a></li>
                         </ul>
                       </li>
                     </ul>

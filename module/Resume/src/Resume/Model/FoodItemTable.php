@@ -47,12 +47,13 @@ namespace Tracker\Model;
      }
 
 
-     public function getFoodHistory($id)
+     public function getMoodHistory($id)
      {
          $id  = (int) $id;
          $rowset = $this->tableGateway->select(array('UserId' => $id));
-         if (!$rowset) {
-             throw new \Exception("Could not find any foods for $id");
+         $row = $rowset->current();
+         if (!$row) {
+             throw new \Exception("Could not find row $id");
          }
          return $rowset;
      }

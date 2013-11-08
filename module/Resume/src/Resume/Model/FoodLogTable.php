@@ -61,7 +61,7 @@ namespace Tracker\Model;
          $this->tableGateway->delete(array('id' => (int) $id));
      }
 
-     public function getTodayLog($userId)
+     public function getTodayLog()
      {
         //$rowset = $this->tableGateway->select(array('Date' => Date('Y-m-d')));
         //return $rowset;
@@ -74,14 +74,14 @@ namespace Tracker\Model;
                  'Protein'=>'Protein',
                  'Alcohol'=>'Alcohol',
                  ))
-        ->where(array('Date' => Date('Y-m-d'),'UserId' => $userId));
+        ->where(array('Date' => Date('Y-m-d')));
 
         $resultSet = $this->tableGateway->selectWith($select);
        
         return $resultSet;
      }
 
-     public function getDailyStats($userId)
+     public function getDailyStats()
      {
         $select = $this->tableGateway->getSql()->select()
         ->join('FoodItem', 'FoodLog.FoodId=FoodItem.FoodId',
@@ -92,7 +92,7 @@ namespace Tracker\Model;
                  'Protein'=>'Protein',
                  'Alcohol'=>'Alcohol',
                  ))
-        ->where(array('Date' => Date('Y-m-d'),'UserId'=> $userId));
+        ->where(array('Date' => Date('Y-m-d')));
 
         $resultSet = $this->tableGateway->selectWith($select);
         $dataArray = iterator_to_array($resultSet,true);
@@ -101,7 +101,7 @@ namespace Tracker\Model;
         return $dailyStatSum;
      }
 
-     public function getWeeklyStats($weekDates,$userId)
+     public function getWeeklyStats($weekDates)
      {
 
         $weeklyData = array();
@@ -114,7 +114,7 @@ namespace Tracker\Model;
                  'Protein'=>'Protein',
                  'Alcohol'=>'Alcohol',
                  ))
-        ->where(array('Date' => $weekDates,'UserId' => $userId));
+        ->where(array('Date' => $weekDates));
         $resultSet = $this->tableGateway->selectWith($select);
 
         $dataArray = iterator_to_array($resultSet,true);

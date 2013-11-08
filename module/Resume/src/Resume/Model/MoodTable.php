@@ -1,9 +1,9 @@
 <?php
-namespace Album\Model;
+namespace Tracker\Model;
 
  use Zend\Db\TableGateway\TableGateway;
 
- class UserTable
+ class MoodTable
  {
      protected $tableGateway;
 
@@ -18,11 +18,10 @@ namespace Album\Model;
          return $resultSet;
      }
 
-     public function getUser($id)
+     public function getMood($id)
      {
-         //$id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('Name' => $id));
-
+         $id  = (int) $id;
+         $rowset = $this->tableGateway->select(array('UserId' => $id));
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");
@@ -30,24 +29,28 @@ namespace Album\Model;
          return $row;
      }
 
-     public function saveAlbum(Drawing $album)
+     public function getMoodHistory($id)
      {
+         $id  = (int) $id;
+         $rowset = $this->tableGateway->select(array('UserId' => $id));
+         $row = $rowset->current();
+         if (!$row) {
+             throw new \Exception("Could not find row $id");
+         }
+         return $rowset;
+     }
+
+     public function saveMood(Mood $newMood)
+     {
+         //echo var_dump($newMood);
+         //die;
          $data = array(
-             'FileName' => $album->fileName,
-             'title'  => $album->title,
+             'Mood' => $newMood->mood,
+             'UserId'  => $newMood->id,
              //'user'  => $album->user,
          );
-
-         $id = (int) $album->id;
-         if ($id == 0) {
              $this->tableGateway->insert($data);
-         } else {
-             if ($this->getAlbum($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
-             } else {
-                 throw new \Exception('Album id does not exist');
-             }
-         }
+         
      }
 
      public function deleteAlbum($id)

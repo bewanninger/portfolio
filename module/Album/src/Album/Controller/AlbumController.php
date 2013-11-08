@@ -30,14 +30,18 @@ namespace Album\Controller;
 
     public function __construct()
     {
-        $this->sessionContainer = new Container('sessionz');
-
-        //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer'));
+        $this->sessionContainer = new Container('album');
+        $this->sessionContainer->offsetSet("Name",
+            ($this->sessionContainer->offsetExists('Name')) ? 
+            $this->sessionContainer->offsetGet("Name") : "Guest");
+        $this->sessionContainer->offsetSet("UserId",
+            ($this->sessionContainer->offsetExists('UserId')) ? 
+            $this->sessionContainer->offsetGet("UserId") : 999);
     }
 
      public function indexAction()
      {
-
+        return $this->redirect()->toRoute('album',array('action'=>'gallery'));
      // grab the paginator from the AlbumTable
      $paginator = $this->getAlbumTable()->fetchAll(true);
      // set the current page to what has been passed in query string, or to 1 if none set
@@ -63,35 +67,16 @@ namespace Album\Controller;
 
             return array('request' => $request,
                           'form' => $form,
-                          'session' => $this->sessionContainer->offsetGet('user'),);
+                          'name' => $this->sessionContainer->offsetGet("Name"),
+                          );
         }
         return array('form' => $form,
                      'request' => 'nope',
-                     'session' => $this->sessionContainer,
-                     'status' => $this->userLoggedIn(),
+                     'name' => $this->sessionContainer->offsetGet("Name"),
                      );
      }
 
-     public function addAction()
-     {
-        $form = new AlbumForm();
-        $form->get('submit')->setValue('Add');
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $album = new Album();
-            $form->setInputFilter($album->getInputFilter());
-            $form->setData($request->getPost());
-
-            if ($form->isValid()) {
-                $album->exchangeArray($form->getData());
-                $this->getAlbumTable()->saveAlbum($album);
-                // Redirect to list of albums
-                return $this->redirect()->toRoute('album');
-            }
-        }
-        return array('form' => $form);
-     }
+    
 
     public function uploadFormAction()
     {
@@ -140,6 +125,7 @@ namespace Album\Controller;
             'form'     => $form,
             'tempFile' => $tempFile,
             'status' => $this->userLoggedIn(),
+            'name' => $this->sessionContainer->offsetGet("Name"),
         );
     }
 
@@ -157,6 +143,7 @@ namespace Album\Controller;
                 'drawings' => $this->getDrawingTable()->fetchAll(),
                 'drawingCount' => $this->getDrawingTable()->getDrawingCount(),
                 'dayCount' => $this->getDrawingTable()->getConsecutiveDaysCount(),
+                'name' => $this->sessionContainer->offsetGet("Name"),
             );
      }
 
@@ -166,111 +153,50 @@ namespace Album\Controller;
         //Get the Id from The URL if there is one, otherwise go to gallery
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
+
+            //modal views use ajax calls using POST to get image
+            $request = $this->getRequest();
+
+            if ($request->isPost()) {
+                
+                $postData = $request->getPost();
+                $id = $postData->id;
+                $drawing = $this->getDrawingTable()->getAlbum($id);
+                echo '<img class ="mainDrawing" src="/img/upload/'.$drawing->fileName.'" 
+                 alt="'.$drawing->title.'">';
+                return $this->response;
+            }
             return $this->redirect()->toRoute('album', array(
                 'action' => 'gallery'
             ));
         }
+
+
         //try to grab the info for the picture id added
         try {
             $drawing = $this->getDrawingTable()->getAlbum($id);
-            return array( 'drawing' => $drawing);
+            return array( 'drawing' => $drawing,
+                'name' => $this->sessionContainer->offsetGet("Name"),
+                );
         }
         catch (\Exception $ex) {
             return $this->redirect()->toRoute('album', array(
-                'action' => 'index'
+                'action' => 'gallery'
             ));
         }
-
-            
      }
-
-     public function editAction()
-     {
-        $id = (int) $this->params()->fromRoute('id', 0);
-        if (!$id) {
-            return $this->redirect()->toRoute('album', array(
-                'action' => 'add'
-            ));
-        }
-        
-        // Get the Album with the specified id.  An exception is thrown
-        // if it cannot be found, in which case go to the index page.
-        try {
-            $album = $this->getAlbumTable()->getAlbum($id);
-        }
-        catch (\Exception $ex) {
-            return $this->redirect()->toRoute('album', array(
-                'action' => 'index'
-            ));
-        }
-
-        $form  = new AlbumForm();
-        $form->bind($album);
-        $form->get('submit')->setAttribute('value', 'Edit');
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setInputFilter($album->getInputFilter());
-            $form->setData($request->getPost());
-
-            if ($form->isValid()) {
-                $this->getAlbumTable()->saveAlbum($album);
-
-                // Redirect to list of albums
-                return $this->redirect()->toRoute('album');
-            }
-        }
-
-        return array(
-            'id' => $id,
-            'form' => $form,
-        );
-     }
-
-     public function deleteAction()
-     {
-        $id = (int) $this->params()->fromRoute('id', 0);
-        if (!$id) {
-            return $this->redirect()->toRoute('album');
-        }
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $del = $request->getPost('del', 'No');
-
-            if ($del == 'Yes') {
-                $id = (int) $request->getPost('id');
-                $this->getAlbumTable()->deleteAlbum($id);
-            }
-
-            // Redirect to list of albums
-            return $this->redirect()->toRoute('album');
-        }
-
-        return array(
-            'id'    => $id,
-            'album' => $this->getAlbumTable()->getAlbum($id)
-        );
-     }
-
      public function dashboardAction()
      {
         if (!$this->userLoggedIn()){
             return $this->redirect()->toRoute('album',array('action'=>'login'));
         }
-        /*
-        $zipcode = (int) $this->params()->fromRoute('id', 60614);
-        $zip = "<li>".$zipcode."</li>\n";
-        file_put_contents('./html/img/quotes_html.txt',$zip,FILE_APPEND);
-        */
-
-        //$this->sendEmail();
 
         $lines = file('./html/img/quotes_html.txt');
         $quote =  $lines[array_rand($lines)] ; 
         return array(
             'quote'=>$quote,
             'theme'=>$this->getTheme(),
+            'name' => $this->sessionContainer->offsetGet("Name"),
             );
      }
 
@@ -303,9 +229,10 @@ namespace Album\Controller;
      public function sendEmail()
      {
         $message = new Message();
-        $message->addTo('ben.wanninger@gmail.com')
+        $message->addTo('ben@benwann.net')
             ->addFrom('dailysketch@benwann.net', 'Ben at Daily Sketch')
-            ->setSubject('I sent this using the Health Tracker Website!');
+            ->setSubject('Daily Sketch Updates!')
+            ->addBcc("bewanninger@gmail.com");
             
         // Setup SMTP transport using LOGIN authentication
         $transport = new SmtpTransport();
@@ -320,7 +247,7 @@ namespace Album\Controller;
             'port' => 587,
         ));
          
-        $html = new MimePart('<b>heii, <i>sorry</i>, i\'m going late</b>');
+        $html = new MimePart(" Body Goes here! Woops.");
         $html->type = "text/html";
          
         $body = new MimeMessage();
@@ -338,6 +265,7 @@ namespace Album\Controller;
         $zipcode = (int) $this->params()->fromRoute('id', 60614);
         return array('zipcode' =>$zipcode);
      }
+
      public function getAlbumTable()
      {
         $table = "album";
@@ -371,17 +299,16 @@ namespace Album\Controller;
 
 
          public function checkLogin($request){
-            #$credentials = $this->sessionContainer->offsetGet('user');
             $user = $this->getTable()->getUser($request->getPost('username',null));
 
             $bcrypt = new Bcrypt();
 
             if ($bcrypt->verify($request->getPost('password',null), $user->password)){
-                return $this->changeUserStatus();
 
-                //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer','authenticated' =>true));
-                //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
-            }
+                $this->sessionContainer->offsetSet('Name',$user->username);
+
+                return $this->changeUserStatus();
+                }
         }
          public function userLoggedIn(){
             
@@ -391,12 +318,13 @@ namespace Album\Controller;
          public function changeUserStatus(){
             $this->sessionContainer->offsetSet('authenticated',true);
             return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
-            
-            //$this->sessionContainer->offsetSet('user',array('username'=>'sofakingdom','password'=>'palmer','authenticated' =>$status));
-         }
+        }
 
          public function logoutAction(){
              $this->sessionContainer->offsetUnset('authenticated');
+             $this->sessionContainer->offsetUnset('Name');
+             $this->sessionContainer->offsetUnset('UserId');
+
              //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
          }
 

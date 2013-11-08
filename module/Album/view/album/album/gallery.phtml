@@ -14,7 +14,64 @@
 <?php foreach ($drawings as $drawing) : ?>
 	<?php //echo var_dump($drawing) ?>
 	<?php $link = $this->url('album',array('action'=>'view','id'=>$drawing->id)); ?>
-	<?php echo '<a href="'.$link.'"><img class="albumThumb" border="0" src="/img/upload/'.$this->escapeHtml($drawing->fileName).'" alt="'.$this->escapeHtml($drawing->title).'"></a>';?>
+	<?php echo '<a href="'.$link.'"><img class="albumThumb" id="'.$drawing->id.'"border="0" src="/img/upload/'.$this->escapeHtml($drawing->fileName).'" alt="'.$this->escapeHtml($drawing->title).'"></a>';?>
 <?php endforeach; ?>
 </div>
  <?php //echo $_SERVER['REQUEST_TIME'] ?> 
+
+
+ <!-- Button trigger modal 
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="modalButton">
+  Launch demo modal
+</button>
+-->
+<!-- Modal 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+-->
+    <!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+
+$(function() {
+
+    /*
+		$(".albumThumb").on("click", function(e) {
+			e.preventDefault();
+			$(".modal-body").html("<p>That's right mofo</p>");
+			$
+			var formurl = '<?php echo $this->url('album',array('action'=>'view')) ?>';
+			$.ajax({
+            url: formurl,
+            type: 'POST',
+            ascyn: false,
+            data: {id : $(this).attr('id')},
+            success: function(data) {
+                        $(".modal-body").html(data);
+                        $("#myModal").show();
+                        return false;
+                     }
+            });
+
+
+		}); 
+
+*/
+    });
+</script>

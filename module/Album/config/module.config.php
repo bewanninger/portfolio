@@ -4,7 +4,6 @@ return array(
      'controllers' => array(
          'invokables' => array(
              'Album\Controller\Album' => 'Album\Controller\AlbumController',
-             'Album\Controller\User' => 'Album\Controller\UserController',
          ),
      ),
      'router' => array(

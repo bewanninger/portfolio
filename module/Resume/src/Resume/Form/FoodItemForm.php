@@ -19,9 +19,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Food Item',
-            ),
-            'attributes' => array(
-                'id' => 'name',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -29,25 +27,15 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Quantity',
-            ),
-            'attributes' => array(
-                'id' => 'quantity',
+                'class' => 'form-control',
             ),
         ));
-
-
         $this->add(array(
             'name' => 'Calories',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Calories',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'calories',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -55,13 +43,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Fat',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'fat',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -69,13 +51,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Carbs',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'carbs',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -83,13 +59,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Protein',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'protein',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(
@@ -97,13 +67,7 @@ class FoodItemForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Alcohol',
-                'label_attributes' => array(
-                    'class' => 'data'
-                    ),
-                ),
-            'attributes' => array(
-                'class' => 'data',
-                'id' => 'alcohol',
+                'class' => 'form-control',
             ),
         ));
         $this->add(array(

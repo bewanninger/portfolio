@@ -7,6 +7,8 @@ use Tracker\Model\FoodLog;
 use Tracker\Model\FoodLogTable;
 use Tracker\Model\FoodItem;
 use Tracker\Model\FoodItemTable;
+use Tracker\Model\User;
+use Tracker\Model\UserTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -67,6 +69,17 @@ class Module
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new FoodItem());
                      return new TableGateway('FoodItem', $dbAdapter, null, $resultSetPrototype);
+                 },
+                 'Tracker\Model\UserTable' =>  function($sm) {
+                     $tableGateway = $sm->get('UserTableGateway');
+                     $table = new UserTable($tableGateway);
+                     return $table;
+                 },
+                 'UserTableGateway' => function ($sm) {
+                     $dbAdapter = $sm->get('tracker');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new User());
+                     return new TableGateway('User', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );

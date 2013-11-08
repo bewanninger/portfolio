@@ -59,13 +59,6 @@ use Zend\InputFilter\InputFilterInterface;
                     array('name' => 'Int'),
                 ),
             ));
-            $inputFilter->add(array(
-                'name'     => 'UserId',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            ));
 
             $inputFilter->add(array(
                 'name'     => 'Mood',

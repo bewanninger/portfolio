@@ -67,22 +67,27 @@ namespace Album\Model;
         $resultSet = $this->tableGateway->select();
         $count = 0; #initialize the day counter
         $timeStamps = array(); 
+        $today = date('U');
+        $oneDay = 60*60*24;
 
         #put timestamps into array for sorting and comparison 
         foreach($resultSet as $row) 
         {
-            array_push($timeStamps,$row->timeStamp); 
+            array_push($timeStamps,date('Y-m-d',strtotime($row->timeStamp)));
         }
-        arsort($timeStamps);
 
+        arsort($timeStamps);
+        
         foreach ($timeStamps as $timeStamp)
         {
             #See if the timestamps are less than a day apart - Uses today as starting point
             # increases acceptable gap by one day each time
-            if (((date('U') - strtotime($timeStamp))/60/60/24) < ($count+1)) 
-            {
+            if (($timeStamp == date('Y-m-d', ($today-($oneDay*$count))))
+                || ($timeStamp == date('Y-m-d', ($today-($oneDay))))) {
                 $count++;
             }
+            else { break; }
+            
         }
         return $count;
     }

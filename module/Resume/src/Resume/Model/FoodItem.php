@@ -6,13 +6,10 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
- class FoodLog implements InputFilterAwareInterface
+ class FoodItem implements InputFilterAwareInterface
  {
-     public $userId;
      public $foodId;
-     public $foodName;
-     public $date;
-     public $quantity;
+     public $name;
      public $calories;
      public $fat;
      public $protein;
@@ -22,11 +19,8 @@ use Zend\InputFilter\InputFilterInterface;
 
      public function exchangeArray($data)
      {
-         $this->userId     = (!empty($data['UserId'])) ? $data['UserId'] : null;
-         $this->foodId = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
-         $this->date  = (!empty($data['Date'])) ? $data['Date'] : null;
-         $this->quantity  = (!empty($data['Quantity'])) ? $data['Quantity'] : null;
-         $this->foodName  = (!empty($data['Name'])) ? $data['Name'] : null;
+         $this->foodId     = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
+         $this->name = (!empty($data['Name'])) ? $data['Name'] : null;
          $this->calories = (!empty($data['Calories'])) ? $data['Calories'] : null;
          $this->fat = (!empty($data['Fat'])) ? $data['Fat'] : null;
          $this->protein = (!empty($data['Protein'])) ? $data['Protein'] : null;
@@ -53,13 +47,6 @@ use Zend\InputFilter\InputFilterInterface;
             $inputFilter = new InputFilter();
 
             $inputFilter->add(array(
-                'name'     => 'FoodId',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            ));
-            $inputFilter->add(array(
                 'name'     => 'UserId',
                 'required' => false,
                 'filters'  => array(
@@ -68,8 +55,44 @@ use Zend\InputFilter\InputFilterInterface;
             ));
 
             $inputFilter->add(array(
-                'name'     => 'Mood',
+                'name'     => 'Quantity',
                 'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Calories',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Fat',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Carbs',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            $inputFilter->add(array(
+                'name'     => 'Protein',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name'     => 'Name',
+                'required' => True,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
@@ -80,7 +103,7 @@ use Zend\InputFilter\InputFilterInterface;
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min'      => 1,
-                            'max'      => 100,
+                            'max'      => 15,
                         ),
                     ),
                 ),

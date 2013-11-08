@@ -1,40 +1,16 @@
-<?php ?>
-<!--
-<h1>Login </h1>
-<div class="container">
-
-      <form class="form-signin" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input name="user" type="text" class="input-block-level" placeholder="Username">
-        <input name="pass" type="password" class="input-block-level" placeholder="Password">
-        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-      </form>
-
-    </div>
--->
-
 <?php
-// module/Album/view/album/album/add.phtml:
+
 $title = 'Login';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
  <?php 
 
- $form->setAttribute('action', $this->url('album', array('action' => 'login')));
+$form->setAttribute('action', $this->url('album', array('action' => 'login')));
 $form->prepare();
 
 
 echo $this->form()->openTag($form);
-#echo $this->formHidden($form->get('id'));
-#echo $this->formRow($form->get('title'));
-#echo $this->formRow($form->get('artist'));
-#echo $this->formSubmit($form->get('submit'));
-//below is the equivalent of the above 4 lines
 echo $this->formCollection($form);
 echo $this->form()->closeTag();
-
-//echo var_dump($this->request);
-//echo var_dump($session);
-//echo "Status: ";
 ?>

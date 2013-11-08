@@ -1,5 +1,5 @@
 <?php
-namespace Album\Model;
+namespace Tracker\Model;
 
  use Zend\Db\TableGateway\TableGateway;
 
@@ -22,7 +22,6 @@ namespace Album\Model;
      {
          //$id  = (int) $id;
          $rowset = $this->tableGateway->select(array('Name' => $id));
-
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");

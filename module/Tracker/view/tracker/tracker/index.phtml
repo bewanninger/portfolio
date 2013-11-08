@@ -1,3 +1,5 @@
+<?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/healthTracker.css') ?>
+
 <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-9">
@@ -10,12 +12,12 @@
           </div>
           <div class="row">
             <?php
-$foodForm->setAttribute('action', $this->url('tracker', array('action' => 'add')));
-$foodForm->prepare();
-echo $this->form()->openTag($foodForm);
-echo $this->formCollection($foodForm);
-echo $this->form()->closeTag();
-?>
+          $foodForm->setAttribute('action', $this->url('tracker', array('action' => 'add')));
+          $foodForm->prepare();
+          echo $this->form()->openTag($foodForm);
+          echo $this->formCollection($foodForm);
+          echo $this->form()->closeTag();
+            ?>
           </div><!--/row-->
         </div><!--/span-->
 
@@ -44,13 +46,6 @@ echo $this->form()->closeTag();
             <div id="output">
             </div>
         </div><!--/span-->
-
-
-
-
-
-
-
 </div>
 
 <!-- Daily Log of Items-->
@@ -69,7 +64,7 @@ echo $this->form()->closeTag();
 
 <div class="col-md-3">
 <div class="panel panel-default">
-  <div class="panel-heading"><h4>Totals<h4></div>
+  <div class="panel-heading"><h4>Today's Totals<h4></div>
 <ul>
 <!-- Daily Log of Calories
 <?=var_dump($dailyStats)   ?> -->
@@ -82,6 +77,12 @@ echo $this->form()->closeTag();
 </ul>
 </div>
 </div> <!-- column -->
+<div class="col-md-3">
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Goals<h4></div>
+
+</div>
+</div> <!-- column -->
 </div> <!-- Daily Log Container -->
 
 
@@ -89,9 +90,33 @@ echo $this->form()->closeTag();
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 
-    /**
+    
+
+     function updateFoodDataFields(data){
+      $('#calories').val(data.calories);
+      $('#fat').val(data.fat);
+      $('#carbs').val(data.carbs);
+      $('#protein').val(data.protein);
+      $('#alcohol').val(data.alcohol);
+     }
+
+     function nameAlert(){
+      if (!($('#nameAlert').length)) {
+                        $('#quantity').after('<p id="nameAlert">Food Not found in Database, please enter info below.</p>');
+                      }
+     }
+
+     function updateOutput(data)
+     {
+      $('#output').prepend("<p><b>"+ data.mood + "</b> was added to today's mood log!</p>")
+                       $('#output').show();
+                       $("#output").effect("highlight",{color:"#D8A9DA"},1500);
+     }
+
+     /**
      * On Ready...
      */
+
     $(function() {
         $("#output").hide();
 
@@ -100,10 +125,7 @@ echo $this->form()->closeTag();
             e.preventDefault();
             var formurl = '<?php echo $this->url('tracker',array('action'=>'add')) ?>';
             var foodItem = $('input[name=Name]').val();
-            //alert(foodItem);
-
             
-
             $.ajax({
             url: formurl,
             type: 'POST',
@@ -138,32 +160,44 @@ echo $this->form()->closeTag();
             return false;
         });
 
-        
-
         $('#mood').on("submit", function(e) {
             e.preventDefault();
             var formurl = '<?php echo $this->url('tracker',array('action'=>'addMood')) ?>';
             var mood = $('input[name=Mood]').val();
-            //alert(foodItem);
+
             $.ajax({
             url: formurl,
             type: 'POST',
             ascyn: false,
+            dataType: 'json',
             data: $('#mood').serialize(),
             success: function(data) {
                         $('#mood').hide("slow");
-                       $('#output').prepend("<p>"+ mood + " was added to today's mood log!</p>")
-                       $('#output').show();
-                       $("#output").effect("highlight",{color:"#D8A9DA"},1500);
-                       return false;
+                        updateOutput(data);
+                        return false;
                      }
             });
         });
 
+        $('#quantity').on("focus", function(e) {
+            var formurl = '<?php echo $this->url('tracker',array('action'=>'foodinfo')) ?>';
 
-
-
-
-
+            $.ajax({
+            url: formurl,
+            type: 'POST',
+            ascyn: false,
+            dataType: "json",
+            data: $('#foodItem').serialize(),
+            success: function(data) {
+                      updateFoodDataFields(data);
+                      $('.data').show(100);
+                       return false;
+                     },
+            error: function(data) {
+                      $('.data').show(100);
+                      nameAlert();
+                     }
+            });
+        });
     });
 </script>
