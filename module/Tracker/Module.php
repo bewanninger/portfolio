@@ -9,6 +9,8 @@ use Tracker\Model\FoodItem;
 use Tracker\Model\FoodItemTable;
 use Tracker\Model\User;
 use Tracker\Model\UserTable;
+use Tracker\Model\WeightGoal;
+use Tracker\Model\WeightGoalTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -80,6 +82,17 @@ class Module
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new User());
                      return new TableGateway('User', $dbAdapter, null, $resultSetPrototype);
+                 },
+                 'Tracker\Model\WeightGoalTable' =>  function($sm) {
+                     $tableGateway = $sm->get('UserTableGateway');
+                     $table = new WeightGoalTable($tableGateway);
+                     return $table;
+                 },
+                 'WeightGoalTableGateway' => function ($sm) {
+                     $dbAdapter = $sm->get('tracker');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new WeightGoal());
+                     return new TableGateway('WeightGoal', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );

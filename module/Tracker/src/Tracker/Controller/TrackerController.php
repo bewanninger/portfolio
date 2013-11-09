@@ -9,6 +9,7 @@ use Tracker\Form\MoodForm;
 use Tracker\Form\FoodItemForm;
 use Tracker\Form\FoodLogForm;
 use Tracker\Form\LoginForm;
+use Tracker\Form\WeightGoalForm;
 use Tracker\Model\Mood;
 use Tracker\Model\MoodTable;
 use Tracker\Model\FoodItem;
@@ -25,6 +26,7 @@ class TrackerController extends AbstractActionController
     protected $foodLogTable;
     protected $foodItemTable;
     protected $userTable;
+    protected $weightGoalTable;
 
 
 	public function __construct()
