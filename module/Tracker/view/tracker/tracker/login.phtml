@@ -6,11 +6,12 @@ $this->headTitle($title);
 ?>
 
 <h1> <?php echo $this->escapeHtml($title); ?> </h1>
- <?php 
 
+<div class=" <?=$errorMessageClass ?>">Couldn't log you in with that username and password. Please try again. </div>
+
+<?php 
 $form->setAttribute('action', $this->url('tracker', array('action' => 'login')));
 $form->prepare();
-
 
 echo $this->form()->openTag($form);
 echo $this->formCollection($form);

@@ -41,7 +41,7 @@ namespace Album\Controller;
 
      public function indexAction()
      {
-        return $this->redirect()->toRoute('album',array('action'=>'gallery'));
+        //return $this->redirect()->toRoute('album',array('action'=>'gallery'));
      // grab the paginator from the AlbumTable
      $paginator = $this->getAlbumTable()->fetchAll(true);
      // set the current page to what has been passed in query string, or to 1 if none set
@@ -59,20 +59,24 @@ namespace Album\Controller;
      {
 
         $form = new LoginForm();
-        //$form->get('submit')->setValue('Add');
         $request = $this->getRequest();
-        if ($request->isPost()) {
-            //check the username and pass
-            $this->checkLogin($request);
 
-            return array('request' => $request,
-                          'form' => $form,
+        if ($request->isPost()) { //check the username and pass if post
+            try { 
+            $this->checkLogin($request);
+            }
+            catch (\Exception $e){
+            }
+
+            //return a new form if checkLogin was not successful
+            return array('form' => $form,
                           'name' => $this->sessionContainer->offsetGet("Name"),
+                          'errorMessageClass' => 'alert alert-danger',
                           );
         }
         return array('form' => $form,
-                     'request' => 'nope',
                      'name' => $this->sessionContainer->offsetGet("Name"),
+                     'errorMessageClass' => 'hidden',
                      );
      }
 

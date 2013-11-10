@@ -120,13 +120,13 @@ class TrackerController extends AbstractActionController
                     $foodItem->exchangeArray($form->getData());
                     $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
 
-                    if($foodId){
+                    if($foodId){//if food was found in database
                         $postQuantity = $request->getPost('Quantity');
                         $this->addItemToFoodLog($foodId,$postQuantity);
                         echo "Food Was Found and Added";
                         echo json_encode($request->getPost());
                         return $this->response;
-                    } else {
+                    } else {//if food item has to be added to database
                         $this->getFoodItemTable()->saveFoodItem($foodItem);
                         $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
 
@@ -219,16 +219,20 @@ class TrackerController extends AbstractActionController
         $form = new LoginForm();
         //$form->get('submit')->setValue('Add');
         $request = $this->getRequest();
-        if ($request->isPost()) {
-            //check the username and pass
+        if ($request->isPost()) { //check the username and pass if one was submitted
+            
+            try { 
             $this->checkLogin($request);
-
-            return array('request' => $request,
+            }
+            catch (\Exception $e){
+            }
+            
+            return array('errorMessageClass' => 'alert alert-danger',
                           'form' => $form,
                           'session' => $this->sessionContainer->offsetGet('user'),);
         }
         return array('form' => $form,
-                     'request' => 'nope',
+                     'errorMessageClass' => 'hidden',
                      'userName' => $this->sessionContainer->offsetGet('Name'),
                      'status' => $this->userLoggedIn(),
                      );
