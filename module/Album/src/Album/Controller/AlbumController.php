@@ -195,6 +195,8 @@ namespace Album\Controller;
             return $this->redirect()->toRoute('album',array('action'=>'login'));
         }
 
+        
+
         $lines = file('./html/img/quotes_html.txt');
         $quote =  $lines[array_rand($lines)] ; 
         return array(
@@ -236,7 +238,7 @@ namespace Album\Controller;
         $message->addTo('ben@benwann.net')
             ->addFrom('dailysketch@benwann.net', 'Ben at Daily Sketch')
             ->setSubject('Daily Sketch Updates!')
-            ->addBcc("bewanninger@gmail.com");
+            ->addBcc("");
             
         // Setup SMTP transport using LOGIN authentication
         $transport = new SmtpTransport();
@@ -246,12 +248,12 @@ namespace Album\Controller;
             'connection_config' => array(
                 'ssl'       => 'tls',
                 'username' => 'dailysketch@benwann.net',
-                'password' => 'trcker23'
+                'password' => ''
             ),
             'port' => 587,
         ));
          
-        $html = new MimePart(" Body Goes here! Woops.");
+        $html = new MimePart("<p>Hi user!  Email content goes here! woops! </p>");
         $html->type = "text/html";
          
         $body = new MimeMessage();
