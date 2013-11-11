@@ -130,13 +130,19 @@
             url: formurl,
             type: 'POST',
             ascyn: false,
+            dataType: 'json',
             data: $('#foodItem').serialize(),
             success: function(data) {
-                       $('#output').prepend("<p>"+foodItem + " was added to today's log!</p>")
+                       $('#output').prepend("<p><b>"+data.Quantity+" "+data.Name + " added to today's log!</b></p>");
                        $('#output').show();
                        $("#output").effect("highlight",{color:"#D8A9DA"},1500);
                        return false;
-                     }
+                     },
+            error: function(data) {
+              $('#output').prepend("<p>Unable to add "+foodItem + " to the log</p>");
+                       $('#output').show();
+                       $("#output").effect("highlight",{color:"#D8A9DA"},1500);
+            }
             });
 
             //clear the form after submitted

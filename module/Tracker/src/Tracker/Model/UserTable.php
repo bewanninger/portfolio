@@ -18,10 +18,9 @@ namespace Tracker\Model;
          return $resultSet;
      }
 
-     public function getUser($id)
+     public function getUser($userName)
      {
-         //$id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('Name' => $id));
+         $rowset = $this->tableGateway->select(array('Name' => $userName));
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");
@@ -29,27 +28,28 @@ namespace Tracker\Model;
          return $row;
      }
 
-     public function saveAlbum(Drawing $album)
+     public function saveUser(User $user)
      {
+        #Todo
          $data = array(
-             'FileName' => $album->fileName,
-             'title'  => $album->title,
-             //'user'  => $album->user,
+             'UserId' => $user->id,
+             'UserName' => $user->name,
+             'Password'  => $user->password,
          );
 
-         $id = (int) $album->id;
+         $id = (int) $user->id;
          if ($id == 0) {
              $this->tableGateway->insert($data);
          } else {
-             if ($this->getAlbum($id)) {
+             if ($this->getUser($id)) {
                  $this->tableGateway->update($data, array('id' => $id));
              } else {
-                 throw new \Exception('Album id does not exist');
+                 throw new \Exception('User id does not exist');
              }
          }
      }
 
-     public function deleteAlbum($id)
+     public function deleteUser($id)
      {
          $this->tableGateway->delete(array('id' => (int) $id));
      }

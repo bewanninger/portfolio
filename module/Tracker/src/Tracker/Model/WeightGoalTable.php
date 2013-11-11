@@ -32,7 +32,7 @@ namespace Tracker\Model;
 
      public function getHistory($userId)
      {
-         $id  = (int) $id;
+         $id  = (int) $userid;
          $rowset = $this->tableGateway->select(array('UserId' => $id));
          $row = $rowset->current();
          if (!$row) {
@@ -49,13 +49,12 @@ namespace Tracker\Model;
              'CurrentWeight' => $newWeightGoal->currentWeight,
              'GoalWeight' => $newWeightGoal->goalWeight,
              'GoalDate' => $newWeightGoal->goalDate,
-             //'user'  => $album->user,
          );
              $this->tableGateway->insert($data);
          
      }
 
-     public function deleteAlbum($id)
+     public function deleteWeightGoal($id)
      {
          $this->tableGateway->delete(array('id' => (int) $id));
      }

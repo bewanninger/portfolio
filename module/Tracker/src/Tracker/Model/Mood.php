@@ -18,8 +18,6 @@ use Zend\InputFilter\InputFilterInterface;
          $this->id     = (!empty($data['UserId'])) ? $data['UserId'] : null;
          $this->mood = (!empty($data['Mood'])) ? $data['Mood'] : null;
          $this->timeStamp  = (!empty($data['TimeStamp'])) ? $data['TimeStamp'] : null;
-     
-         //$this->user  = (!empty($data['user'])) ? $data['user'] : null;
      }
 
      public function getArrayCopy()

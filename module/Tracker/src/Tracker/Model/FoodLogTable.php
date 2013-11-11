@@ -18,18 +18,7 @@ namespace Tracker\Model;
          return $resultSet;
      }
 
-     public function getMood($id)
-     {
-         $id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('UserId' => $id));
-         $row = $rowset->current();
-         if (!$row) {
-             throw new \Exception("Could not find row $id");
-         }
-         return $row;
-     }
-
-     public function getMoodHistory($id)
+     public function getFoodLogHistory($id)
      {
          $id  = (int) $id;
          $rowset = $this->tableGateway->select(array('UserId' => $id));
@@ -56,15 +45,13 @@ namespace Tracker\Model;
          $this->tableGateway->insert($data);
      }
 
-     public function deleteAlbum($id)
+     public function deleteFoodLog($id)
      {
          $this->tableGateway->delete(array('id' => (int) $id));
      }
 
      public function getTodayLog($userId)
      {
-        //$rowset = $this->tableGateway->select(array('Date' => Date('Y-m-d')));
-        //return $rowset;
         $select = $this->tableGateway->getSql()->select()
         ->join('FoodItem', 'FoodLog.FoodId=FoodItem.FoodId',
             array('Name'=>'Name',
@@ -154,6 +141,11 @@ namespace Tracker\Model;
             }
         }
             return $dailyTotals;
+     }
+
+     public function dailyPercentages($dataArray)
+     {
+        #Todo - Return category breakdown of percentage of daily Calories
      }
 
 }

@@ -32,26 +32,25 @@ class TrackerController extends AbstractActionController
 	public function __construct()
     {
         $this->sessionContainer = new Container('tracker');
-        //$this->sessionContainer->offsetSet("Name","Guest");
-        //$this->sessionContainer->offsetSet("UserId",999);
         $this->sessionContainer->offsetSet("Epoch",strtotime("2013-09-29"));
+
+        #set username and user ID to default if not logged in
         $this->sessionContainer->offsetSet("Name",
             ($this->sessionContainer->offsetExists('Name')) ? 
             $this->sessionContainer->offsetGet("Name") : "Guest");
         $this->sessionContainer->offsetSet("UserId",
             ($this->sessionContainer->offsetExists('UserId')) ? 
             $this->sessionContainer->offsetGet("UserId") : 999);
-        //$this->foodId     = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
     }
 
 	public function indexAction(){
+        #Initialize Forms Needed For View
 		$moodForm = new MoodForm();
         $foodItemForm = new FoodItemForm();
         $foodLogForm = new FoodLogForm();
-
+        #get user id to populate data for user
         $userId = $this->sessionContainer->offsetGet('UserId');
 
-        
 		return array('moodForm' => $moodForm,
             'foodForm' => $foodItemForm,
             'name' => $this->sessionContainer->offsetGet("Name"),
@@ -73,11 +72,12 @@ class TrackerController extends AbstractActionController
     public function addMoodAction()
         {
         $moodForm = new MoodForm();
-        $request = $this->getRequest();
 
+        $request = $this->getRequest();
 
         if ($request->isPost()) {
             $newMood = new Mood();
+
             $moodForm->setInputFilter($newMood->getInputFilter());
             $moodForm->setData($request->getPost());
 
@@ -88,17 +88,13 @@ class TrackerController extends AbstractActionController
 
                 echo json_encode($newMood);
                 return $this->response;
-                //return array("moodForm" =>$moodForm);
             }
-            
         }
-        
     }
 
     public function addAction()
      {
-
-
+        #get URI params and set defaults if none
         $id = (int) $this->params()->fromRoute('id', 0);
         $quantity = (int) $this->params()->fromRoute('quantity',1);
  
@@ -107,11 +103,8 @@ class TrackerController extends AbstractActionController
         if(!$id){ # check to see if there was a food id passed in the uri,
                     # If not, get the post params and look for the foodItem
                     # redirect if item has ID, if not, add it to FoodItem table.
-            
-
             $request = $this->getRequest();
             if ($request->isPost()) {
-
                 $foodItem = new FoodItem();
                 $form->setInputFilter($foodItem->getInputFilter());
                 $form->setData($request->getPost());
@@ -120,28 +113,26 @@ class TrackerController extends AbstractActionController
                     $foodItem->exchangeArray($form->getData());
                     $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
 
-                    if($foodId){//if food was found in database
+                    if($foodId){#if food was found in database
                         $postQuantity = $request->getPost('Quantity');
                         $this->addItemToFoodLog($foodId,$postQuantity);
-                        echo "Food Was Found and Added";
+                        
                         echo json_encode($request->getPost());
                         return $this->response;
-                    } else {//if food item has to be added to database
+                    } else {#if food item has to be added to database
                         $this->getFoodItemTable()->saveFoodItem($foodItem);
                         $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
 
                         $postQuantity = $request->getPost('Quantity');
                         $this->addItemToFoodLog($foodId,$postQuantity);
-                        echo "Food Item was created and then added to log";
+                        
                         echo json_encode($request->getPost());
                         return $this->response;
-                        //return "hello";
                     }
                 }
-                //if the form is not valid
+                #if the form is not valid
                 else {
                     echo "Form was not valid";
-                    echo json_encode($request->getPost());
                     return $this->response;
                 }
             } 
@@ -149,25 +140,25 @@ class TrackerController extends AbstractActionController
             #Use the URI to add an already existing food Item to the foodLog
                   echo $this->addItemToFoodLog($id,$quantity);
                   return $this->response;
-                  //echo "retry";
         }
         echo "No Post - No ID";
         return $this->response;
-        //return $this->redirect()->toRoute('tracker');
      }
 
-     public function foodinfoAction(){
+     #Takes a post request with foodItem form
+     public function foodinfoAction(){ 
+        #initialize objects for view
         $foodItem = new FoodItem();
         $form = new FoodItemForm();
 
             $request = $this->getRequest();
-            if ($request->isPost()) {
+            if ($request->isPost()) { #check for post
 
                 $form->setInputFilter($foodItem->getInputFilter());
-                $form->setData($request->getPost());
+                $form->setData($request->getPost()); #use post data to make form
 
-                if ($form->isValid()) {
-                    $foodItem->exchangeArray($form->getData());
+                if ($form->isValid()) { # make sure data checks out
+                    $foodItem->exchangeArray($form->getData()); 
                     $foodId = $this->getFoodItemTable()->getFoodId($foodItem);
                     try { 
                         $foodItemInfo = $this->getFoodItemTable()->getFoodItem($foodId);
@@ -184,32 +175,22 @@ class TrackerController extends AbstractActionController
             else{
                 echo "Whatchu doin here? Get out of here.";
                 return false;
-                //return $this->response;
             }
 
                 
      }
 
+
      public function dashboardAction()
      {
-        $id = (int) $this->params()->fromRoute('id', 0);
         $userId = $this->sessionContainer->offsetGet('UserId');
 
-        $day = 60*60*24;
-        $weekDates = array();
-        $weekDays = "[";
-        for ($i=0;$i<7;$i++){
-            $dayTime = time()-($day*$i);
-            array_push($weekDates,date('Y-m-d',$dayTime));
-            $weekDays .= '"'.date('l', $dayTime).'",'; 
-        }
-        $weekDays = rtrim($weekDays, ",")."]";
-        //$weekDays .= "]";
+        $weekDates = $this->weekDates(); # get the dates (y-m-d) for the week
 
         $weekStats = $this->getFoodLogTable()->getWeeklyStats($weekDates,$userId);
         $weekChartData = $this->formatChartData($weekStats);
 
-        return array('weekDays'=>$weekDays,
+        return array('weekDays'=> $this->weekDays(),
                     'weekData' => $weekChartData);
      }
 
@@ -240,13 +221,11 @@ class TrackerController extends AbstractActionController
 
 
     public function logoutAction(){
+            #unset session authentication and user info
              $this->sessionContainer->offsetUnset('authenticated');
              $this->sessionContainer->offsetUnset('Name');
              $this->sessionContainer->offsetUnset('userId');
-
-
-             //return $this->redirect()->toRoute('album',array('action'=>'upload-form'));
-         }
+    }
 
      public function addItemToFoodLog($foodId, $quantity)
      {
@@ -267,26 +246,53 @@ class TrackerController extends AbstractActionController
          return $this->foodLogTable;
      }
 
+    #returns string of last 7 days in proper format for chart.js label 
+     public function weekDays()
+     {
+        $day = 60*60*24;
+        $weekDays = "[";
+        for ($i=0;$i<7;$i++){
+            $dayTime = time()-($day*$i);
+            $weekDays .= '"'.date('l', $dayTime).'",'; 
+        }
+        $weekDays = rtrim($weekDays, ",")."]";
+        return $weekDays;
+     }
+
+     #returns array of last 7 days' dates in (y-m-d) format
+     public function weekDates()
+     {
+        $day = 60*60*24;
+        $weekDates = array();
+        for ($i=0;$i<7;$i++){
+            $dayTime = time()-($day*$i);
+            array_push($weekDates,date('Y-m-d',$dayTime));
+        }
+        return $weekDates;
+     }
+
+     #reuturns strings with data formatted to be used for Chart.js charts
      public function formatChartData($weeklyStats)
      {
+        #initialize and array with keys for all the datasets
         $chartData = array("calories" => "[",
                             "fat" => "[",
                             "carbs" => "[",
                             "protein" => "[",
                             "alcohol" => "[");
         $categories = array("calories","fat","carbs","protein","alcohol");
+        #add each daily stat to each category in proper string format for chart.js
         foreach($weeklyStats as $dailyStat)
         {
             foreach($categories as $cat)
             {
                 $chartData[$cat] .= '"'.$dailyStat[$cat].'",';
-                
             }
         }
+
         foreach($categories as $cat)
             {
                 $chartData[$cat] = rtrim($chartData[$cat], ",")."]";
-                
             }
                 return $chartData;
      }
@@ -314,27 +320,24 @@ class TrackerController extends AbstractActionController
          }
 
 
-         public function checkLogin($request){
-            #$credentials = $this->sessionContainer->offsetGet('user');
-            $user = $this->getTable()->getUser($request->getPost('username',null));
+    public function checkLogin($request){
+        $user = $this->getTable()->getUser($request->getPost('username',null));
 
-            $bcrypt = new Bcrypt();
-
-
-            if ($bcrypt->verify($request->getPost('password',null), $user->password)){
-                $this->sessionContainer->offsetSet('UserId', $user->id);
-                $this->sessionContainer->offsetSet('Name', $user->username);
-                return $this->changeUserStatus();
-            }
+        $bcrypt = new Bcrypt();
+        
+         if ($bcrypt->verify($request->getPost('password',null), $user->password)){
+            $this->sessionContainer->offsetSet('UserId', $user->id);
+             $this->sessionContainer->offsetSet('Name', $user->username);
+            return $this->changeUserStatus();
         }
+    }
 
-         public function userLoggedIn(){
-            
-            return $this->sessionContainer->offsetExists('authenticated');
-         }
+    public function userLoggedIn(){ 
+        return $this->sessionContainer->offsetExists('authenticated');
+    }
 
-         public function changeUserStatus(){
-            $this->sessionContainer->offsetSet('authenticated',true);
-            return $this->redirect()->toRoute('tracker');
-        }
+    public function changeUserStatus(){
+        $this->sessionContainer->offsetSet('authenticated',true);
+        return $this->redirect()->toRoute('tracker');
+    }
 }
