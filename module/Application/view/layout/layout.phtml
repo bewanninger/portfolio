@@ -74,7 +74,8 @@ $userName   = (!empty($child->name)) ? $child->name : "Guest";
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                       <!-- <li><a href="<?php echo $this->url('album',array('action'=>'login')) ?>">Login</a></li> -->
-                      <li class="dropdown">
+                      <li class="<?php echo ($this->url() == '/') ? 'hidden' : 'dropdown'; ?>">
+
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?="Logged in as ".$this->escapeHtml($userName) ?><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                           <li><a href="<?php echo $this->url() ?>login">Login</a></li>
