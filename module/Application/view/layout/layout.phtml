@@ -21,13 +21,16 @@ $userName   = (!empty($child->name)) ? $child->name : "Guest";
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                         ->prependStylesheet($this->basePath() . '/css/style.css')
+                        //->prependStylesheet($this->basePath() . '/css/typeahead.js-bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') 
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/lyrics.css') 
                         ->prependStylesheet($this->basePath() . '//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css') ?>
                         
 
         <!-- Scripts -->
         <?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/typeahead.js')
             ->prependFile($this->basePath() . '/js/bootstrap.min.js')
             ->prependFile($this->basePath() . '/js/Chart.min.js')
             ->prependFile($this->basePath() . '/js/jquery.min.js')

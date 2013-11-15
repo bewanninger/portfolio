@@ -340,4 +340,13 @@ class TrackerController extends AbstractActionController
         $this->sessionContainer->offsetSet('authenticated',true);
         return $this->redirect()->toRoute('tracker');
     }
+
+    public function foodlistAction(){
+        $query = (string) $this->params()->fromRoute('quantity',"");
+        $foodList = $this->getFoodItemTable()->foodList($query);
+
+
+        echo json_encode($foodList);
+        return $this->response;
+    }
 }

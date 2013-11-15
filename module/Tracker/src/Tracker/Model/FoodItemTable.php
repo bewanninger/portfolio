@@ -2,6 +2,9 @@
 namespace Tracker\Model;
 
  use Zend\Db\TableGateway\TableGateway;
+ use Zend\Db\Sql\Where;
+ use Zend\Db\Sql\Select;
+ use Zend\Db\Sql\Predicate\Predicate;
 
  class FoodItemTable
  {
@@ -15,7 +18,42 @@ namespace Tracker\Model;
      public function fetchAll()
      {
          $resultSet = $this->tableGateway->select();
+
          return $resultSet;
+     }
+
+     public function foodList($query)
+     {
+        /*
+        echo $query;
+        
+        $rowSet = $this->tableGateway->select(function (Select $select) {
+            $select->where->like('Name', "'%D%'");
+        });
+        */
+/*
+        $filter =  new Predicate(); 
+        $filter->like('Name','%a%'); 
+        $rowSet = $this->tableGateway->select(function(Select $select) use 
+        ($filter){ 
+        $select->where($filter);
+        }); 
+*/
+        //echo $query;
+        $rowSet = $this->tableGateway->select(function (Select $select) use ($query) {
+                $select->where("Name LIKE '%".$query."%'");
+        });
+
+
+        $foodList = array();
+        foreach ($rowSet as $foodItem)
+        {
+            array_push($foodList, $foodItem->name);
+        }
+
+        
+        return $foodList;
+        
      }
 
      public function getFoodItem($id)
@@ -68,7 +106,6 @@ namespace Tracker\Model;
              'Fat' => ((!empty($newFood->fat)) ? $newFood->fat : 0),
              'Protein' => ((!empty($newFood->protein)) ? $newFood->protein : 0),
              'Alcohol' => ((!empty($newFood->alcohol)) ? $newFood->alcohol : 0),
-             //'user'  => $album->user,
          );
          //echo "Not saving to fooditem table becuase of comments";
         $this->tableGateway->insert($data);

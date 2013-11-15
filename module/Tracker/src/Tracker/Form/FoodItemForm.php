@@ -22,6 +22,7 @@ class FoodItemForm extends Form
             ),
             'attributes' => array(
                 'id' => 'name',
+                'class' => 'typeahead',
             ),
         ));
         $this->add(array(

@@ -4,6 +4,7 @@ return array(
     'modules' => array(
         'Application',
         'Album',
+        'Lyrics',
         'ZF2FileUploadExamples',
         'Tracker',
         'Resume',

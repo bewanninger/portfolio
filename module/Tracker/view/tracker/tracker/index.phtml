@@ -1,4 +1,5 @@
-<?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/healthTracker.css') ?>
+<?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/typeahead.js-bootstrap.css')
+  ->prependStylesheet($this->basePath() . '/css/healthTracker.css') ?>
 
 <div class="row row-offcanvas row-offcanvas-right">
 
@@ -120,6 +121,12 @@
 
     $(function() {
         $("#output").hide();
+
+
+        $('#foodItem .typeahead').typeahead({                          
+          name: 'Fooooooood',
+          remote: 'foodlist/1/%QUERY'
+        });
 
         //call to add action with food item
         $('#foodItem').on("submit", function(e) {

@@ -1,0 +1,41 @@
+.one {
+	font-size: 2px;
+	display:none;
+}
+.two {
+	font-size: 4px;
+	display:none;
+}
+.three {
+	font-size: 8px;
+}
+.four {
+	font-size: 12px;
+}
+.five {
+	font-size: 16px;
+}
+.six {
+	font-size: 20px;
+}
+.seven {
+	font-size: 30px;
+}
+.eight {
+	font-size: 40px;
+}
+.nine {
+	font-size: 60px;
+}
+
+#counter {
+	height:30px;
+	width:40%;
+	margin: 0 auto;
+	text-align: center
+}
+
+#lyrics a{
+	border:1px solid black;
+	margin:0;
+}

@@ -15,7 +15,7 @@ return array(
                      'constraints' => array(
                          'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                          'id'     => '[0-9]+',
-                         'quantity'     => '[0-9]',
+                         'quantity'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                      ),
                      'defaults' => array(
                          'controller' => 'Tracker\Controller\Tracker',
