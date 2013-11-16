@@ -8,6 +8,8 @@ input {
 }
 #foodItem{
   background-color:rgba(172, 172, 219, 0.57);
+  width:95%;
+  padding-right: 60px;
   border-radius: 10px;
   margin: 12px;
   padding: 10px 10% 10px 10%;
@@ -27,7 +29,6 @@ min-width:10%;
 }
 
 #foodItem input{
-  margin-left: 10px;
   float:left;
   clear:right;
 }
@@ -48,7 +49,12 @@ min-width:10%;
 }
 
 #foodItem .btn{
-  min-width:40%;
+  min-width:50%;
+  float:left;
+  clear:both;
+  font-size: 18px;
+  margin: 10px;
+
 }
 .jumbotron{
   text-align: center;

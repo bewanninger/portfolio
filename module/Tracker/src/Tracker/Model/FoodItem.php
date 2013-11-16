@@ -21,11 +21,11 @@ use Zend\InputFilter\InputFilterInterface;
      {
          $this->foodId     = (!empty($data['FoodId'])) ? $data['FoodId'] : null;
          $this->name = (!empty($data['Name'])) ? $data['Name'] : null;
-         $this->calories = (!empty($data['Calories'])) ? $data['Calories'] : null;
-         $this->fat = (!empty($data['Fat'])) ? $data['Fat'] : null;
-         $this->protein = (!empty($data['Protein'])) ? $data['Protein'] : null;
-         $this->carbs = (!empty($data['Carbs'])) ? $data['Carbs'] : null;
-         $this->alcohol  = (!empty($data['Alcohol'])) ? $data['Alcohol'] : null;
+         $this->calories = (!empty($data['Calories'])) ? $data['Calories'] : 0;
+         $this->fat = (!empty($data['Fat'])) ? $data['Fat'] : 0;
+         $this->protein = (!empty($data['Protein'])) ? $data['Protein'] : 0;
+         $this->carbs = (!empty($data['Carbs'])) ? $data['Carbs'] : 0;
+         $this->alcohol  = (!empty($data['Alcohol'])) ? $data['Alcohol'] : 0;
      
          //$this->user  = (!empty($data['user'])) ? $data['user'] : null;
      }

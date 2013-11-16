@@ -125,7 +125,8 @@
 
         $('#foodItem .typeahead').typeahead({                          
           name: 'Fooooooood',
-          remote: 'foodlist/1/%QUERY'
+          remote: '<?php echo $this->url('tracker',array('action'=>'foodlist',
+            'id' => 1))."/%QUERY" ?>'
         });
 
         //call to add action with food item
