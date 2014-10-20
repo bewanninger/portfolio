@@ -1,9 +1,8 @@
 <?php
-
  /**
   * Display all errors when APPLICATION_ENV is development.
   */
- 
+
  $_SERVER['APPLICATION_ENV'] = 'development';
 
  if ($_SERVER['APPLICATION_ENV'] == 'development') {
